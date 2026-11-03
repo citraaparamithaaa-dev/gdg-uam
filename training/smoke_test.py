@@ -12,6 +12,7 @@ from competition_api import Sample, load_dataset
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=Path, default=Path("../submission/model.py"))
+    parser.add_argument("--report",type=Path,help="optional report outside the model repository")
     args = parser.parse_args()
     model_path = args.model.resolve()
     sys.path.insert(0, str(model_path.parent))
@@ -58,7 +59,9 @@ def main():
               "p99_latency_ms": 1000*float(np.quantile(times,.99)),
               "max_latency_ms": 1000*float(max(times))}
     print(json.dumps(report, indent=2), flush=True)
-    (model_path.parent / "smoke_test_results.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    report_path=args.report or model_path.parent/"smoke_test_results.json"
+    report_path.parent.mkdir(parents=True,exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

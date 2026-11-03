@@ -39,13 +39,13 @@ A second training-only split (seed 123) gave 87.33% accuracy. It is a split-sens
 
 The 400-row demo contains only 50 examples per class. It was inspected as a distribution-shift diagnostic during development, so its results are not an untouched estimate of hidden-test performance. One changed prediction changes overall demo accuracy by 0.25 percentage points. The validation split follows the training distribution; it can overestimate performance after a distribution shift. Final refit harness results are recorded separately in `evidence/` when available. Finite-file scores cannot be interpreted as the score of an infinite 60-second official stream.
 
-## Reproduce training
-
 ## Final refit harness check
 
 On the supplied 400-row demo, the final refit achieved 77.25% accuracy across three runs, mean finite-file score 2.5650, mean prediction latency 2.118 ms, and 0 failed runs. These are local Windows CPU results, not the hidden competition score or a Colab timing result. The notebook `verify_colab.ipynb` is provided for the remaining Colab CPU check.
 
 
+
+## Reproduce training
 
 Keep the competition data out of this repository. The following commands obtain the original materials, add these training scripts, recreate the experiments, refit the selected design, and produce another inference package. Training requires the additional libraries in `training/requirements-training.txt`.
 
