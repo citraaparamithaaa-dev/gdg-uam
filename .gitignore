@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.nbc
+*.nbi
+.venv/
+work/
+refit-package/

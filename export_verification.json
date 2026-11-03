@@ -1,0 +1,10 @@
+{
+  "samples_checked": 1000,
+  "prediction_matches": true,
+  "max_raw_score_error": 1.0658141036401503e-14,
+  "trees": 1600,
+  "nodes": 46400,
+  "feature_kind": "structure",
+  "weights_bytes": 667639,
+  "source_model": "experiments\\balanced_core_200\\final.pkl"
+}

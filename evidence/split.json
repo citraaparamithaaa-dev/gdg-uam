@@ -1,0 +1,7 @@
+{
+  "seed": 42,
+  "stratified": true,
+  "training_rows": 80000,
+  "validation_rows": 20000,
+  "demo_used_for_training": false
+}

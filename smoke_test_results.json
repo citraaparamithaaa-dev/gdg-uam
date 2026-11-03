@@ -1,0 +1,17 @@
+{
+  "edge_cases_passed": 6,
+  "edge_predictions": [
+    4,
+    6,
+    6,
+    6,
+    4,
+    1
+  ],
+  "metadata_independence_checks": 100,
+  "setup_seconds": 6.882977599976584,
+  "prediction_samples": 1000,
+  "mean_latency_ms": 2.264946900890209,
+  "p99_latency_ms": 4.9471380043542,
+  "max_latency_ms": 6.1508999788202345
+}

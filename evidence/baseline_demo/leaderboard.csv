@@ -1,0 +1,2 @@
+rank,project,mean,best,worst,median,trimmed_mean,mean_minus_std,failed_runs,mean_accuracy_all,mean_n_scored,mean_latency_s
+1,baseline_model,0.1333272231897717,0.1333272231897717,0.1333272231897717,0.1333272231897717,0.1333272231897717,0.1333272231897717,0,0.4025,400.0,0.033779532333333334

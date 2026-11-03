@@ -1,0 +1,68 @@
+{
+  "project": "model",
+  "model_path": "experiments\\balanced_core_200\\runtime\\model.py",
+  "n_runs": 3,
+  "ranking_metric": "mean",
+  "ranking_score": 26.023875788109166,
+  "aggregates": {
+    "best": 26.023875788109166,
+    "worst": 26.023875788109166,
+    "mean": 26.023875788109166,
+    "median": 26.023875788109166,
+    "trimmed_mean": 26.023875788109166,
+    "mean_minus_std": 26.023875788109166
+  },
+  "failed_runs": 0,
+  "dataset_config_hash": null,
+  "eval_config_hash": "641cc40d90d5c5902ba4d9a4816ec4442c51900edf7378a9fd17bec6e679a82e",
+  "mean_accuracy_all": 0.8767333333333335,
+  "mean_n_scored": 15000.0,
+  "mean_latency_s": 0.0023581570044444444,
+  "runs": [
+    {
+      "run": 0,
+      "status": "ok",
+      "failure_reason": null,
+      "score": 26.023875788109166,
+      "n_scored": 15000,
+      "accuracy_all": 0.8767333333333334,
+      "accuracy_answered": 0.8767333333333334,
+      "end_reason": "stream_exhausted",
+      "model_time_s": 34.4746004999998,
+      "stream_hash": "3140e2994dfa2bc105eb72a97af3e1b08d58ed54cffb8204faf14efd42b3f37e",
+      "stream_samples": 15000,
+      "warmup_samples": 100,
+      "warmup_end_reason": "max_samples"
+    },
+    {
+      "run": 1,
+      "status": "ok",
+      "failure_reason": null,
+      "score": 26.023875788109166,
+      "n_scored": 15000,
+      "accuracy_all": 0.8767333333333334,
+      "accuracy_answered": 0.8767333333333334,
+      "end_reason": "stream_exhausted",
+      "model_time_s": 35.755613900000064,
+      "stream_hash": "fcde05a0badda6896ceaf45501c8fb0b73f3893278125d9d944b7d5111d7cae2",
+      "stream_samples": 15000,
+      "warmup_samples": 100,
+      "warmup_end_reason": "max_samples"
+    },
+    {
+      "run": 2,
+      "status": "ok",
+      "failure_reason": null,
+      "score": 26.023875788109166,
+      "n_scored": 15000,
+      "accuracy_all": 0.8767333333333334,
+      "accuracy_answered": 0.8767333333333334,
+      "end_reason": "stream_exhausted",
+      "model_time_s": 35.88685080000018,
+      "stream_hash": "2c8c7ce373a5ec67ba3ef5672359efba88abc94107410b4eeb6a34c645bee35b",
+      "stream_samples": 15000,
+      "warmup_samples": 100,
+      "warmup_end_reason": "max_samples"
+    }
+  ]
+}
