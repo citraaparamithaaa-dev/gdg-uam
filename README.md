@@ -6,6 +6,8 @@ This repository contains a trained eight-class classifier for the GDG UAM machin
 
 Use Python 3.12 with the versions in `requirements.txt`. In the official materials folder:
 
+For the evaluation-platform check, [open the CPU verification notebook in Google Colab](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb) and run its cells. The repository URL is already configured.
+
 ```powershell
 python -m pip install -r PATH_TO_THIS_REPOSITORY/requirements.txt
 python harness.py evaluate --model PATH_TO_THIS_REPOSITORY/model.py --source file:data/test_demo.npz
