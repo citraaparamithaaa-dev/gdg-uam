@@ -1,5 +1,7 @@
 # GDG UAM time series classification entry
 
+The reasoning behind every design decision, the shift investigation and the measured results are described in [APPROACH.md](APPROACH.md).
+
 This repository contains a trained eight-class classifier for the GDG UAM machine learning contest. The selected development configuration is **balanced_core_200**. The submitted weights are refitted on all 100,000 official training rows after model selection. Demo labels are never used for fitting.
 
 ## Run the entry
