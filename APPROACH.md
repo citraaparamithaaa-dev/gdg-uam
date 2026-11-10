@@ -105,11 +105,11 @@ The investigation chain, in order:
    evaluation stream overlays **sparse, class-correlated outliers** (class 7 much spikier
    than class 6: standardized kurtosis 11.3 vs 5.1), plus mild noise and a doubled NaN rate.
 3. **Response.** Despike each sample before feature extraction: values beyond 5 robust
-   median/MAD deviations are replaced with the channel median (`core_features.despike`,
+   median/MAD deviations are replaced by linear interpolation between non-outlier neighbors (`core_features.despike_interp`,
    numba, verified bitwise-equal to the numpy reference). No retraining, no demo labels,
    +0.18 ms.
 
-The clip level (5.0) and style (median-replace) were selected across seven configurations
+The clip level (4.5) and fill style (linear interpolation) were selected across a dozen configurations
 on the demo — a single-parameter selection, documented as such.
 
 ### 3.3 What was tried and rejected
@@ -131,6 +131,9 @@ Every rejection is a measurement, recorded in `evidence/despiking.json` and
   the untouched halves; a 6/7 specialist fitted on demo rows runs at chance. In-sample demo
   gains are fiction; measured out-of-sample, they are negative.
 - **Ensembles** with the robust variants: 79.8-81.3%, below the single despiked model.
+- **Stream-adaptive feature recentering** (label-free, warmup/running stream statistics): -2 to -3 pp; the drift is not a uniform offset.
+- **Consistent despiked training** (train on despiked features): 78.75-79.75% on demo; the preprocessing mismatch acts as robustness regularization.
+- **NaN-mask structure** as features: flat across classes in train.
 - **The 6/7 pair bound**: a train-fitted binary specialist separates 6/7 at 77.1% on the train check and exactly chance (50.0%) on the demo pool, confidence collapsing 2.08 -> 0.76. Even in-distribution the pair tops out near 77%; 90% overall would need ~90% pool accuracy.
 - **Corruption-level proxies** (event coincidence, outlier rates): strong AUCs on the full demo pool (0.92) but chance-level on the rows that actually matter; split-half validation is negative.
 
@@ -144,10 +147,11 @@ Official harness, three runs each, shipped package (commit history in this repos
 | --- | ---: | ---: | ---: |
 | Original entry (full extractor) | 77.25% | 2.565 | 2.12 ms |
 | + pruned extractor (bitwise-identical) | 77.25% | 2.565 | ~2x faster |
-| + inference-time despiking (shipped) | **81.50%** | **3.229** | unchanged within noise |
+| + median-fill despiking | 81.50% | 3.229 | unchanged within noise |
+| + interpolation-fill despiking (shipped) | **82.25%** | **3.292** | unchanged within noise |
 
 Per-class demo recalls, shipped package:
-`[0.72, 0.98, 0.94, 0.84, 0.92, 0.96, 0.52, 0.64]` (before despiking:
+`[0.72, 0.98, 0.98, 0.82, 0.94, 0.98, 0.50, 0.66]` (before despiking:
 `[0.68, 0.98, 0.86, 0.84, 0.88, 0.92, 0.44, 0.58]`).
 
 Regression guards: clean 15k-check accuracy 93.61% -> 93.57% (despiking does not touch
@@ -161,7 +165,7 @@ from the accuracy gain alone, on top of the speed term gained from the pruned ex
 The shipped model makes 74 errors out of 400 demo samples; 44 of them are in the class
 6/7 pool. Every representation tested separates that pool at only 46-60% on untouched
 rows (the main model, robust spike features, combined specialists, prototype matching), so
-the honest ceiling sits near 84-85% overall. Reaching 90% would require labeled data drawn
+the honest ceiling sits near 84-85% overall (shipped: 82.25%). Reaching 90% would require labeled data drawn
 from the evaluation generator — a larger labeled eval-like set or its per-class parameters —
 which participants do not have. If such data becomes available, fine-tuning against even a
 few thousand rows is the one credible path past the ceiling; the despike pipeline is
@@ -180,6 +184,6 @@ python training/build_twostage.py        # rejected specialist packaging
 python harness.py evaluate --model model.py --source file:data/test_demo.npz
 ```
 
-Evidence files: `evidence/despiking.json` (shift finding, tuning, rejections),
+Evidence files: `evidence/despiking.json` (shift finding, tuning, rejections), `evidence/interp_despiking.json` (interpolation fill),
 `evidence/class_pairs.json` (class-pair experiments), `evidence/core_demo/` and
 `evidence/despiked_demo/` (harness runs), `evidence/pruning_parity.json`.

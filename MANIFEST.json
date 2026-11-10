@@ -1,8 +1,8 @@
 {
   ".gitattributes": "c76b60d8ff287c78683697f6edc3b8a524d34bbf2c19389ba78c420a6cca9315",
   ".gitignore": "0d5cf79d4dd89756988e31c8a0c23464a2fd5e7d9d0ebf6d90708d0637049283",
-  "APPROACH.md": "0fa26cde006d98dd3b2219f491a54687e245bab1e8f74f99360f6232b66b905d",
-  "MANIFEST.json": "c1790418a6c047d224fb0cf55ee205c50d1537d03b21762f5b7a2d49318be105",
+  "APPROACH.md": "bebad4f7a337ea5d5beeb305d939343fc002c061adf6fa9dcdaa474cc1c6897e",
+  "MANIFEST.json": "5f8fe31df34863f6a66ecf44000bdc69238d42bac5e8a6ee842867dbe6db2054",
   "README.md": "087347c8ef07162ce1d2ae67d1dbe97e14953e43c729043874f52433ec8307ba",
   "core_features.py": "beb37e3226a6e3b684f96daa46047b49e3df31ca2d4537f03e2748fdc4db1b08",
   "evidence/balanced_core_200.json": "c7b2ba60d9dc0e9c1a211c47fa20de099700fe13082a44cb809269c91db67191",
