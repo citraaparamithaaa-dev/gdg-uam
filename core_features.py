@@ -128,6 +128,55 @@ def despike(series, k):
 
 
 @njit(cache=True)
+def despike_interp(series, k):
+    """Replace samples beyond k robust deviations (median/MAD) with linear
+    interpolation between non-outlier neighbors. Numpy-equivalent:
+    med = np.median(v); mad = np.median(|v-med|)*1.4826+1e-9;
+    outlier = |z| > k (finite only); out[outlier] = np.interp(...)."""
+    channels, length = series.shape
+    out = np.empty((channels, length), dtype=np.float64)
+    buf = np.empty(length, dtype=np.float64)
+    dev = np.empty(length, dtype=np.float64)
+    mark = np.empty(length, dtype=np.int64)
+    kp = np.empty(length, dtype=np.float64)
+    kv = np.empty(length, dtype=np.float64)
+    for c in range(channels):
+        n = 0
+        for t in range(length):
+            x = series[c, t]
+            out[c, t] = x
+            if not np.isnan(x):
+                buf[n] = x
+                n += 1
+        if n < 20:
+            continue
+        med = _median_sorted(np.sort(buf[:n]))
+        for i in range(n):
+            d = buf[i] - med
+            dev[i] = -d if d < 0.0 else d
+        mad = _median_sorted(np.sort(dev[:n])) * 1.4826 + 1e-9
+        m = 0
+        for t in range(length):
+            x = out[c, t]
+            if not np.isnan(x):
+                d = (x - med) / mad
+                ad = -d if d < 0.0 else d
+                if ad > k:
+                    mark[t] = 1
+                    continue
+                kp[m] = t
+                kv[m] = x
+                m += 1
+            mark[t] = 0
+        if m < 10:
+            continue
+        for t in range(length):
+            if mark[t] == 1:
+                out[c, t] = np.interp(float(t), kp[:m], kv[:m])
+    return out
+
+
+@njit(cache=True)
 def fill_missing(series):
     channels, length = series.shape
     raw = np.empty((channels, length), dtype=np.float64)

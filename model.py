@@ -27,8 +27,8 @@ class Model:
             self.trees = tuple(packed[key] for key in (
                 "roots", "feature", "threshold", "left", "right", "value", "missing_left", "initial"))
         if self.kind == "core":
-            from core_features import despike, features
-            self.transform = lambda sample: features(despike(sample.series, 5.0))
+            from core_features import despike_interp, features
+            self.transform = lambda sample: features(despike_interp(sample.series, 4.5))
         elif self.kind == "structure":
             from structure_features import features
             self.transform = lambda sample: features(sample.series)
