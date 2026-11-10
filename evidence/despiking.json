@@ -39,7 +39,9 @@
     "demo_label_offsets": "8 offsets fitted on 200 demo rows, evaluated on the untouched 200: accuracy -2.5 to -4.5 pp in three seeds. In-sample-only gain; rejected.",
     "demo_label_6v7_specialist": "46-50 percent heldout accuracy on the binary task (chance); the class pair is near-indistinguishable at the demo's corruption level with 25 examples per class.",
     "corruption_augmented_training": "Robustness to simulated outlier/noise/NaN corruption (+7 pp on simulated shift) did not transfer to demo (77.0 percent vs 77.25 shipped; the mixed variant 75.3).",
-    "class_weighting": "see evidence/class_pairs.json"
+    "class_weighting": "see evidence/class_pairs.json",
+    "spike_feature_specialists": "Pre-clip robust spike features (robust kurtosis, outlier rates, max deviation per channel) separate demo 6/7 only weakly (AUC 0.77-0.86 per channel; best single thresholds 55-60 percent). A gated specialist combining them with clip features matched chance on split-half heldout rows (pool accuracy 0.46-0.59 across seeds and margins) and moved overall accuracy by -1.5 to +1.0 pp.",
+    "model_ensembles": "Averaging the shipped model with corruption-augmented variants: 79.8-81.3 percent, all below the single shipped model's 81.5."
   },
-  "accuracy_ceiling_note": "The evaluation generator's per-class spike overlay makes classes 6 and 7 near-indistinguishable at demo corruption levels; 90 percent overall accuracy is not supported by any validation available here."
+  "accuracy_ceiling_note": "Total demo errors at the shipped configuration: 74 of 400 (81.5 percent). 44 of them sit in the class 6/7 pool, which measures 46-60 percent heldout accuracy for every separator tested (main model, spike features, combined specialists, prototypes); even a perfect pool resolver would reach 92.5 percent, but no tested approach exceeds ~60 percent pool accuracy out-of-sample, putting the honest ceiling near 84-85 percent. Reaching beyond that requires labeled data drawn from the evaluation generator (a larger labeled eval-like set or the generator's per-class parameters), which participants do not have."
 }
