@@ -92,6 +92,42 @@ def _median_sorted(s):
 
 
 @njit(cache=True)
+def despike(series, k):
+    """Replace samples beyond k robust deviations (median/MAD) with the channel
+    median. The evaluation stream contains sparse class-correlated outliers;
+    removing them restores the training-like signal shape. Numpy-equivalent:
+    med = np.median(v); mad = np.median(|v-med|)*1.4826+1e-9; |z|>k -> med."""
+    channels, length = series.shape
+    out = np.empty((channels, length), dtype=np.float64)
+    buf = np.empty(length, dtype=np.float64)
+    dev = np.empty(length, dtype=np.float64)
+    for c in range(channels):
+        n = 0
+        for t in range(length):
+            x = series[c, t]
+            out[c, t] = x
+            if not np.isnan(x):
+                buf[n] = x
+                n += 1
+        if n < 20:
+            continue
+        med = _median_sorted(np.sort(buf[:n]))
+        for i in range(n):
+            d = buf[i] - med
+            dev[i] = -d if d < 0.0 else d
+        mad = _median_sorted(np.sort(dev[:n])) * 1.4826 + 1e-9
+        for t in range(length):
+            x = out[c, t]
+            if np.isnan(x):
+                continue
+            d = (x - med) / mad
+            ad = -d if d < 0.0 else d
+            if ad > k:
+                out[c, t] = med
+    return out
+
+
+@njit(cache=True)
 def fill_missing(series):
     channels, length = series.shape
     raw = np.empty((channels, length), dtype=np.float64)

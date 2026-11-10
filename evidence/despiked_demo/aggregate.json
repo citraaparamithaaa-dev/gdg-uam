@@ -1,0 +1,68 @@
+{
+  "project": "model",
+  "model_path": "submission/model.py",
+  "n_runs": 3,
+  "ranking_metric": "mean",
+  "ranking_score": 3.22930454104119,
+  "aggregates": {
+    "best": 3.2293045410411905,
+    "worst": 3.2293045410411905,
+    "mean": 3.22930454104119,
+    "median": 3.2293045410411905,
+    "trimmed_mean": 3.22930454104119,
+    "mean_minus_std": 3.2293045410411896
+  },
+  "failed_runs": 0,
+  "dataset_config_hash": null,
+  "eval_config_hash": "4c50d62e38c47aadcf055ddedb049c96455ca46a0671852f52d70c8f7ff345aa",
+  "mean_accuracy_all": 0.815,
+  "mean_n_scored": 400.0,
+  "mean_latency_s": 0.0029664347499999996,
+  "runs": [
+    {
+      "run": 0,
+      "status": "ok",
+      "failure_reason": null,
+      "score": 3.2293045410411905,
+      "n_scored": 400,
+      "accuracy_all": 0.815,
+      "accuracy_answered": 0.815,
+      "end_reason": "stream_exhausted",
+      "model_time_s": 1.2547915999999997,
+      "stream_hash": "d1ea4ed0e4b81804eac6ba9418b211f4528774a05228656f76e2544b82b3c64b",
+      "stream_samples": 400,
+      "warmup_samples": 100,
+      "warmup_end_reason": "max_samples"
+    },
+    {
+      "run": 1,
+      "status": "ok",
+      "failure_reason": null,
+      "score": 3.2293045410411905,
+      "n_scored": 400,
+      "accuracy_all": 0.815,
+      "accuracy_answered": 0.815,
+      "end_reason": "stream_exhausted",
+      "model_time_s": 1.4714345999999994,
+      "stream_hash": "89c1f3171eeb575d3fa6d0a62b480b86604d0c3acadcba9c3273810875d15ae8",
+      "stream_samples": 400,
+      "warmup_samples": 100,
+      "warmup_end_reason": "max_samples"
+    },
+    {
+      "run": 2,
+      "status": "ok",
+      "failure_reason": null,
+      "score": 3.2293045410411905,
+      "n_scored": 400,
+      "accuracy_all": 0.815,
+      "accuracy_answered": 0.815,
+      "end_reason": "stream_exhausted",
+      "model_time_s": 0.8334954999999994,
+      "stream_hash": "d8dc3cdebfa2891d55405a2b981808e42a5510847d2e9b79f59231de0f1fe811",
+      "stream_samples": 400,
+      "warmup_samples": 100,
+      "warmup_end_reason": "max_samples"
+    }
+  ]
+}
