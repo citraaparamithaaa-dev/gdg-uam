@@ -1,0 +1,48 @@
+{
+  "experiment": "class-pair accuracy work (strategy C): class weighting and 6/7 specialist",
+  "date": "2026-11-10",
+  "question": "Can recall on the weak classes 6/7 (and 0/3) be improved enough to raise the geometric-mean score without losing robustness under distribution shift?",
+  "protocol": "Fit on the seed-42 80k train split, tune on the 5k calibration rows only, score once on the untouched 15k check rows; the seed-123 split repeats the comparison; the 400-row demo (drawn like the evaluation data) is the final gate. Demo labels were never used for fitting or tuning.",
+  "baseline_reproduction": {
+    "candidate": "balanced_core_200 (dev fit + offset calibration)",
+    "check_score": 26.204,
+    "recorded_check_score": 26.024,
+    "note": "Slightly above the recorded value because the offset search adds a 0.0625 step."
+  },
+  "candidates": [
+    {
+      "name": "ungated 6/7 specialist (binary HGB on the same 231 features, argmax override)",
+      "check_score": 26.015,
+      "verdict": "rejected: flips 457 decisions (210 fixed, 185 broke); trades class 6 recall for class 7"
+    },
+    {
+      "name": "ungated 0/3 specialist",
+      "check_score": 26.072,
+      "verdict": "rejected: negative"
+    },
+    {
+      "name": "confidence-gated 6/7 specialist (tau=0.5, pair-margin<=0.25, tuned on calibration rows)",
+      "check_score": 26.409,
+      "seed123_verdict": "not re-measured",
+      "demo_verdict": "neutral: demo score 2.565 and accuracy 77.25%, identical to the shipped package",
+      "verdict": "rejected: no gain on the shifted demo, and the gate thresholds cannot be honestly re-tuned for the final refit (its calibration rows were seen in training) without holding out fresh rows"
+    },
+    {
+      "name": "class-weighted main fit, weights x2 on classes 6/7",
+      "check_score_seed42": 26.429,
+      "check_score_seed123": 26.029,
+      "plain_seed123": 25.880,
+      "demo_score": 2.23,
+      "demo_accuracy": 0.76,
+      "demo_verdict": "class-6 recall falls 0.44 -> 0.34 on demo; its term drops 0.35 -> 0.10",
+      "verdict": "rejected: helps in-distribution (+0.15/+0.23 across two splits) but clearly hurts on the evaluation-like distribution; upweighting train-file class frequencies is exactly the shift the organizers warn about"
+    },
+    {
+      "name": "class weights x2 on 0/3 as well",
+      "check_score": 26.330,
+      "verdict": "rejected with the weighting approach"
+    }
+  ],
+  "conclusion": "Both mechanisms improve the in-distribution check score but fail or stay neutral on the demo distribution. The shipped package (pruned-extractor balanced_core_200) remains the best known configuration. In-distribution gains did not transfer to the shifted evaluation-like data; consistent with the organizers' warning that the evaluation data differs in noise, ranges and class balance.",
+  "reproduce": "python training/try_class_weights.py; python training/build_twostage.py"
+}

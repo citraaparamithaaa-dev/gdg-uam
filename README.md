@@ -41,6 +41,8 @@ All candidates begin with the same stratified seed-42 split: 80,000 training row
 
 A second training-only split (seed 123) gave 87.33% accuracy. It is a split-sensitivity check, not an untouched test set.
 
+Two candidate accuracy improvements for the weak class pairs were built and rejected at the demo gate (`evidence/class_pairs.json`): a class-weighted fit (x2 on classes 6/7) raised the in-distribution check score on two splits but scored 2.23 on demo against 2.565, losing class-6 recall under shift, and a confidence-gated 6/7 specialist was demo-neutral while adding a second-stage model whose thresholds cannot be honestly recalibrated after the final refit. In-distribution gains did not transfer to the evaluation-like distribution.
+
 The 400-row demo contains only 50 examples per class. It was inspected as a distribution-shift diagnostic during development, so its results are not an untouched estimate of hidden-test performance. One changed prediction changes overall demo accuracy by 0.25 percentage points. The validation split follows the training distribution; it can overestimate performance after a distribution shift. Final refit harness results are recorded separately in `evidence/` when available. Finite-file scores cannot be interpreted as the score of an infinite 60-second official stream.
 
 ## Final refit harness check

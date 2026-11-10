@@ -1,8 +1,8 @@
 {
   ".gitattributes": "c76b60d8ff287c78683697f6edc3b8a524d34bbf2c19389ba78c420a6cca9315",
   ".gitignore": "0d5cf79d4dd89756988e31c8a0c23464a2fd5e7d9d0ebf6d90708d0637049283",
-  "MANIFEST.json": "98e382bf87dc0d9260eec2680856966279d7665998c8c10d8970a7d07792b26c",
-  "README.md": "948ba91f4054caa5ac78adf8d98d53a7e470aa3b75b3933c2bf187e0e426baac",
+  "MANIFEST.json": "2c1df739f717b4bd857dffbc6b9c7cf7809588fed945981e26ee59d64f69427b",
+  "README.md": "85dd74d0a8cffed0952630f3f90ceac5ab66edaf956c695009df6c83335089e0",
   "core_features.py": "615a81b7dc0a9553c2d036c50a43a86916c0dc9a145421d0c8a021b47414734f",
   "evidence/balanced_core_200.json": "c7b2ba60d9dc0e9c1a211c47fa20de099700fe13082a44cb809269c91db67191",
   "evidence/baseline_300.json": "f263950309fe97b787fc5d16dabf499acb4ad5cc80f95e8ebe8d7a1e910e0d84",
@@ -13,6 +13,7 @@
   "evidence/baseline_demo/run_2.json": "e7416ee3813b907075bbd3efc36ac515a5955549bb99ad27d630f94e81eb585b",
   "evidence/baseline_shape_300.json": "2001dad88060ca10c22de94854d22209ea9fadabbc1de3e3d7f5742fa5ebe637",
   "evidence/calibration_split_ids.npz": "7f6950e26c70b37532c49643769125ac60aab4bfedd1edeb146d13361c582728",
+  "evidence/class_pairs.json": "9acbf6ce992f0279b9fb01ecda72758b0241a04a0b7f5d9dcc39e124e47904cc",
   "evidence/core_demo/aggregate.json": "289ae80b1723fc47ac99d4327b59ac9a6d44858fae4d0454b3a4ad5e535d49b7",
   "evidence/core_demo/leaderboard.csv": "b2bcef674424cddcf03b6712da28b32ac4772f6f0fb8f06b356dd48d1b02f638",
   "evidence/core_demo/run_0.json": "80914c5c57f1640700786285997d728047f8e4f61cd6e1f7aac41d568ca4273b",
@@ -47,6 +48,7 @@
   "smoke_test_results.json": "513bdbb871cb87a9148a7f63c6b88299b9bf45d4572a13ec560f961046583f71",
   "structure_features.py": "259d545467f10e03593ddad43404635c602992c662cb58832ad7940fc55c1676",
   "training/audit_candidate.py": "d92043676d1de1dccb71750824827265eff74c6d561b8741aff9e96e5fdd96bb",
+  "training/build_twostage.py": "9aaa21eb5f2fac0f9aee4acff369d54e069fda7c70436c6514010e9ab0dc0028",
   "training/calibrate_bias.py": "6d942d8e37b8c8f5bf9862f046acce53df4b17fc3a33fb294873138d5d8ec23a",
   "training/check_parity.py": "c52f1022f0a14b144769c9d75549559eec5a022e23558e3126fba8e35349901c",
   "training/core_features.py": "615a81b7dc0a9553c2d036c50a43a86916c0dc9a145421d0c8a021b47414734f",
@@ -62,6 +64,7 @@
   "training/structure_features.py": "259d545467f10e03593ddad43404635c602992c662cb58832ad7940fc55c1676",
   "training/train_candidates.py": "10103062053f9a8a7f0ebf2d3dcb4c8c72d1acfe40d621d34424a513f96d0313",
   "training/train_structure.py": "4889ce223272be1e191364c78f2b116e0b09136f039abb485e71fc902687ba96",
+  "training/try_class_weights.py": "c92f0fbf303b9d28b199f11c527e1f1bbfb2124d6950fa3666b58b9ed51aedbc",
   "verify_colab.ipynb": "2d6195b75684ad43bd26c3f5cc14427c802fd89ca0102e3bc89437db4ca13fa7",
   "weights.npz": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d"
 }
