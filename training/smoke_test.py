@@ -48,7 +48,7 @@ def main():
         answer = model.predict(sample)
         times.append(time.perf_counter() - start)
         assert type(answer) is int and 0 <= answer <= 7
-        if model.kind in ("signal", "structure") and i < 100:
+        if model.kind in ("core", "signal", "structure") and i < 100:
             changed_meta = Sample(sample.series, {"sample_rate": 999., "group": "unseen", "level": -999.})
             assert model.predict(changed_meta) == answer, "Metadata changed a signal-only prediction"
             metadata_checks += 1

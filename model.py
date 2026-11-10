@@ -26,7 +26,10 @@ class Model:
             self.kind = str(packed["kind"].item())
             self.trees = tuple(packed[key] for key in (
                 "roots", "feature", "threshold", "left", "right", "value", "missing_left", "initial"))
-        if self.kind == "structure":
+        if self.kind == "core":
+            from core_features import features
+            self.transform = lambda sample: features(sample.series)
+        elif self.kind == "structure":
             from structure_features import features
             self.transform = lambda sample: features(sample.series)
         elif self.kind == "signal":

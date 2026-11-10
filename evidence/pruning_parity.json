@@ -1,0 +1,8 @@
+{
+  "source": "data/test_demo.npz",
+  "values_checked": 139524,
+  "rows_checked": 604,
+  "mismatching_rows": 0,
+  "full_extractor_ms": 4.484,
+  "pruned_extractor_ms": 1.847
+}

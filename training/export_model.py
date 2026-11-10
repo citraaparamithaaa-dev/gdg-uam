@@ -16,7 +16,7 @@ from competition_api import load_dataset
 ROOT = Path(__file__).resolve().parent
 
 
-def export(source, target):
+def export(source, target, core=False):
     source = source.resolve()
     target.mkdir(parents=True, exist_ok=True)
     with source.open("rb") as f:
@@ -41,14 +41,17 @@ def export(source, target):
         dtype = np.float64 if key in ("threshold", "value") else np.int64
         arrays[key] = np.asarray(arrays[key], dtype=dtype)
     bias = np.asarray(saved.get("bias", np.zeros(8)),dtype=np.float64)
+    package_kind = "core" if core else kind
     arrays.update(initial=clf._baseline_prediction.ravel().astype(np.float64)+bias,
-                  indices=np.asarray(indices, dtype=np.int64), kind=np.asarray(kind))
+                  indices=np.asarray(indices, dtype=np.int64), kind=np.asarray(package_kind))
     np.savez_compressed(target / "weights.npz", **arrays)
     shutil.copyfile(ROOT / "runtime_model.py", target / "model.py")
     if kind in ("signal", "structure"):
         shutil.copyfile(ROOT / "signal_features.py", target / "signal_features.py")
         if kind == "structure":
             shutil.copyfile(ROOT / "structure_features.py", target / "structure_features.py")
+        if package_kind == "core":
+            shutil.copyfile(ROOT / "core_features.py", target / "core_features.py")
     else:
         shutil.copyfile(ROOT / "examples/baseline_model.py", target / "baseline_features.py")
     (target / "requirements.txt").write_text(f"numpy=={np.__version__}\nnumba=={numba.__version__}\n", encoding="utf-8")
@@ -72,9 +75,22 @@ def export(source, target):
     if expected != actual or max_error > 1e-9:
         raise AssertionError(f"Export changed predictions: max raw score error {max_error}")
     report = {"samples_checked": 1000, "prediction_matches": True, "max_raw_score_error": max_error,
-              "trees": len(arrays["roots"]), "nodes": offset, "feature_kind": kind,
+              "trees": len(arrays["roots"]), "nodes": offset, "feature_kind": package_kind,
               "weights_bytes": (target / "weights.npz").stat().st_size,
               "source_model": str(source.relative_to(ROOT))}
+    if package_kind == "core":
+        # The pruned extractor must reproduce the structure features bit for bit.
+        from structure_features import features as full_features
+        from core_features import features as pruned_features
+        mismatch = 0
+        for i in range(1000):
+            sample = ds[i]
+            if not np.array_equal(full_features(sample.series)[indices],
+                                  pruned_features(sample.series)[indices]):
+                mismatch += 1
+        if mismatch:
+            raise AssertionError(f"Pruned extractor differs on {mismatch}/1000 samples")
+        report["pruned_feature_matches"] = True
     (target / "export_verification.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2), flush=True)
 
@@ -83,5 +99,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
     parser.add_argument("target", type=Path)
+    parser.add_argument("--core", action="store_true",
+                        help="package the pruned core extractor (balanced_core_200)")
     args = parser.parse_args()
-    export(args.source, args.target)
+    export(args.source, args.target, core=args.core)

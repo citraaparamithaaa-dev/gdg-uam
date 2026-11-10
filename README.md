@@ -4,7 +4,7 @@ This repository contains a trained eight-class classifier for the GDG UAM machin
 
 ## Run the entry
 
-Use Python 3.12 with the versions in `requirements.txt`. In the official materials folder:
+Use Python 3.12 with the versions in `requirements.txt`. Cold setup (library import and Numba compilation) takes about 18 seconds, well inside the 120 s setup timeout. In the official materials folder:
 
 For the evaluation-platform check, [open the CPU verification notebook in Google Colab](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb) and run its cells. The repository URL is already configured.
 
@@ -18,6 +18,8 @@ python harness.py evaluate --model PATH_TO_THIS_REPOSITORY/model.py --source fil
 ## Approach
 
 Each channel is centered and scaled. Features describe its distribution, local changes, autocorrelation, frequency content, and relationships between channels. The structural variant also measures frequency and amplitude changes across time and their behavior in a shared component of channels 0 and 1. The core variant retains the first two channels' shape and spectral features, six channel correlations, and the first two channels' and shared component's structural features. Absolute channel level, absolute channel scale, and metadata are excluded. A histogram gradient boosting classifier is trained on those summaries. Its numerical trees are exported to NumPy arrays and traversed with Numba on one CPU thread. Export parity is checked against the fitted scikit-learn model.
+
+Because the score rewards answering more samples within the fixed prediction-time budget, the shipped package computes only the 231 features the classifier reads (`core_features.py`): the pruned extractor skips the unused lag sweeps, difference correlations, and channels 2-3 summaries, and reimplements the retained reductions (pairwise sums, medians, interpolated quantiles) to reproduce the original values bit for bit. `training/check_parity.py` compares both extractors over real, NaN-fuzzed, and pathological inputs; the recorded check covered 604 rows and 139,524 values with zero differences and a 2.4x faster extractor. The official harness on the demo set reproduces the original score 2.5650 and accuracy 77.25% exactly, with mean prediction latency 1.8 ms versus 5.1 ms for the full extractor on the same machine.
 
 The balanced variant adds eight fixed class offsets to the model's scores. These offsets are calibrated to improve the competition's geometric mean objective using 5,000 rows from the training-file holdout; they never use demo labels. The remaining 15,000 holdout rows are excluded from both classifier fitting and offset calibration. The holdout was consulted during feature selection, so this remains development evidence. The offsets are retained when the classifier is refitted on all training rows.
 
@@ -43,7 +45,7 @@ The 400-row demo contains only 50 examples per class. It was inspected as a dist
 
 ## Final refit harness check
 
-On the supplied 400-row demo, the final refit achieved 77.25% accuracy across three runs, mean finite-file score 2.5650, mean prediction latency 2.118 ms, and 0 failed runs. These are local Windows CPU results, not the hidden competition score or a Colab timing result. The notebook `verify_colab.ipynb` is provided for the remaining Colab CPU check.
+On the supplied 400-row demo, the final refit achieved 77.25% accuracy across three runs, mean finite-file score 2.5650, and 0 failed runs. With the original full extractor these runs took 2.118 ms mean prediction latency on the development machine; the pruned package shipped here reproduces the identical score and accuracy (`evidence/core_demo/`) with 1.8 ms mean latency on a different, slower Windows laptop, where the full extractor measures 5.1 ms. These are local CPU results, not the hidden competition score or a Colab timing result. The notebook `verify_colab.ipynb` is provided for the remaining Colab CPU check.
 
 
 
@@ -63,7 +65,8 @@ python train_structure.py
 python calibrate_bias.py core_structure_200 --out balanced_core_200
 python audit_candidate.py balanced_core_200
 python train_candidates.py --final balanced_core_200
-python export_model.py experiments/balanced_core_200/final.pkl ../refit-package
+python export_model.py experiments/balanced_core_200/final.pkl ../refit-package --core
+python check_parity.py --source data/test_demo.npz --weights ../refit-package/weights.npz
 ```
 
 Training settings:
