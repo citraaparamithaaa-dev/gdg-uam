@@ -131,6 +131,8 @@ Every rejection is a measurement, recorded in `evidence/despiking.json` and
   the untouched halves; a 6/7 specialist fitted on demo rows runs at chance. In-sample demo
   gains are fiction; measured out-of-sample, they are negative.
 - **Ensembles** with the robust variants: 79.8-81.3%, below the single despiked model.
+- **The 6/7 pair bound**: a train-fitted binary specialist separates 6/7 at 77.1% on the train check and exactly chance (50.0%) on the demo pool, confidence collapsing 2.08 -> 0.76. Even in-distribution the pair tops out near 77%; 90% overall would need ~90% pool accuracy.
+- **Corruption-level proxies** (event coincidence, outlier rates): strong AUCs on the full demo pool (0.92) but chance-level on the rows that actually matter; split-half validation is negative.
 
 ---
 
