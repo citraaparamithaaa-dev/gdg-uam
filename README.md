@@ -1,32 +1,37 @@
-# GDG UAM · Time-Series Classification
+# GDG UAM · Machine Learning Competition
 
-A CPU-based submission for the **GDG UAM Machine Learning Competition**, classifying four-channel time series into eight classes.
+**Eight-class classification of multichannel time series**
 
-The submitted model combines robust signal preprocessing, 231 normalized features, and histogram gradient boosting. Trained weights are included; evaluation requires no retraining.
+A compact gradient-boosted classifier with **NumPy-only CPU inference**, trained weights included, and verification using the unmodified official evaluation harness.
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb)
 
-[Evaluation instructions](#evaluate-a-fresh-clone) · [Method](APPROACH.md) · [Results](RESULTS.md) · [Verification evidence](VERIFICATION.json) · [Official competition materials](https://github.com/GDG-UAM/ml-contest-materials)
+[Run the submission](#run-the-submission) · [Method](#method) · [Detailed results](RESULTS.md) · [Colab evidence](evidence/colab/2026-11-12/) · [Official materials](https://github.com/GDG-UAM/ml-contest-materials)
 
-## Submission at a glance
+## Verified results
 
-| Item | Details |
-| --- | --- |
-| Entry point | [`model.py`](model.py), defining `class Model` |
-| Trained model | [`weights.npz`](weights.npz), approximately 0.67 MB |
-| Dependencies | [`requirements.txt`](requirements.txt): NumPy only |
-| Tested Python versions | Python 3.12 locally; Python 3.13.18 in Colab |
-| Execution | CPU inference; one numerical thread under the official harness |
-| Prediction | One Python integer from `0` to `7` per sample |
-| Training data | All 100,000 examples in the official training file |
+The submitted model completed **three official-harness runs in Google Colab**, with identical accuracy and no evaluation failures. The archived model files match this repository byte for byte.
 
-All required weights and helper files are committed to this repository. No file exceeds GitHub's 100 MB limit, and Git LFS is not required.
+| Metric | Google Colab result |
+| --- | ---: |
+| Public demo accuracy | **82.25% — 329 / 400 correct** |
+| Official score on the finite demo | **3.2924** |
+| Prediction time for all 400 samples | **1.47–2.46 seconds** |
+| Maximum model setup time | **1.44 seconds** |
+| Successful official runs | **3 / 3** |
+| Exceptions, invalid outputs, and timeouts | **0** |
 
-## Evaluate a fresh clone
+**Environment:** Python 3.13.18, NumPy 2.5.4, CPU execution with numerical libraries restricted to one thread by the official harness. Prediction timing excludes installation, setup, and warmup. The model performs no runtime compilation.
 
-Use the **unmodified official harness** from the organizer's materials repository. Follow its [setup instructions](https://github.com/GDG-UAM/ml-contest-materials#setup), including downloading `data/train_100k.npz` for the default evaluation command.
+The separate prediction-contract check also passed: all 400 predictions took **2.09–4.13 seconds**, across three repetitions. Both setup and whole-demo prediction met the **under-10-second target** in every recorded check. Timing varies with the assigned machine and load.
 
-Starting from the directory containing the organizer's `harness.py`:
+The [Colab verification record](evidence/colab/2026-11-12/VERIFICATION.json) documents archive provenance, file hashes, and individual run results. Six additional local official-harness runs, including a fresh GitHub clone, are recorded in [RESULTS.md](RESULTS.md).
+
+## Run the submission
+
+Use Python 3.12 or 3.13 and the pinned inference dependency in [`requirements.txt`](requirements.txt).
+
+First follow the [official materials setup](https://github.com/GDG-UAM/ml-contest-materials#setup), including downloading `data/train_100k.npz` for the default evaluation command. Then, **from the directory containing the organizer's `harness.py`**, run:
 
 ```bash
 git clone https://github.com/citraaparamithaaa-dev/gdg-uam.git submission-check
@@ -34,83 +39,54 @@ python -m pip install -r submission-check/requirements.txt
 python harness.py evaluate --model submission-check/model.py
 ```
 
-The last line is the competition's submission-check command. With the current public harness, it evaluates the training file by default. Because the final model was fitted on that file, its accuracy there is a compatibility check rather than an independent measure of generalization.
-
-### Public demo check
-
-For the 400-sample demo, download `data/test_demo.npz` as described in the official setup and run:
+To reproduce the reported 400-sample demo results, download `data/test_demo.npz` through the official setup and run:
 
 ```bash
 python harness.py evaluate --model submission-check/model.py --source file:data/test_demo.npz --runs 3
 ```
 
-This is the command used for the reported demo results. The official harness and `competition_api.py` are supplied by the organizer; run these commands from that materials directory so both are available.
-
-## Measured results
-
-The selected runtime passed six local official-harness runs, including a fresh GitHub clone, and **three Google Colab runs**. The supplied Colab result archive was checked against the notebook: all nine embedded input files matched, and the four model/package files were byte-identical to this repository.
-
-| Metric | Local: six official runs | Colab: three official runs |
-| --- | ---: | ---: |
-| Public demo accuracy | **82.25% — 329 / 400** | **82.25% — 329 / 400** |
-| Official score on the finite demo | 3.2924 | 3.2924 |
-| Total model prediction time for all 400 samples | 1.24–1.97 seconds | 1.47–2.46 seconds |
-| Maximum model setup time | **0.50 seconds** | **1.44 seconds** |
-| Exceptions, invalid predictions, and timeouts | 0 | 0 |
-
-The table's timings come from the committed [local evaluator logs](evidence/latest/fast_setup_official_demo), [fresh-clone logs](evidence/latest/fast_setup_fresh_clone), and [Colab results](evidence/colab/2026-11-12). Prediction time excludes dependency installation, model setup, and warmup. The current runtime performs **no JIT compilation**. Both setup and all 400 predictions were below 10 seconds in every recorded run; the official setup allowance is 120 seconds. Colab used Python 3.13.18 and NumPy 2.5.4. Timing varies by machine and load.
-
-The separate Colab contract check timed all 400 predictions three times at **2.09–4.13 seconds**, also below the 10-second target. Its 22 numerical edge cases, input preservation, repeatability, and 100 metadata checks passed. These direct timings and official-harness timings use different measurement boundaries; both are retained in the [Colab verification record](evidence/colab/2026-11-12/VERIFICATION.json).
-
-The previous compiled runtime recorded local setup up to 33.96 seconds, compared with 0.50 seconds locally and 1.44 seconds in Colab for the current runtime. Per-sample prediction takes longer: the previous runtime processed all 400 samples locally in 0.48–0.75 seconds. Since official scoring uses a fixed prediction-time budget, this startup improvement can reduce the number of samples scored on the hidden stream. The earlier compiled version remains available at [commit 5e08d47](https://github.com/citraaparamithaaa-dev/gdg-uam/tree/5e08d476da89d183489effd9eabc74ac7ee27671).
-
-### Robustness checks
-
-The new runtime matched the previous model on **5,000 additional training signals** and **2,800 demo-based stress cases**, covering random missing values, contiguous outages, a missing channel, sparse spikes, and changes in gain and offset. All checks completed without invalid outputs, input modification, or inconsistent predictions. Another **22 numerical edge cases** passed, including all-NaN inputs, constants, and extreme float32 values. Full results and the reproducible comparison are in [the robustness report](evidence/latest/fast_setup_robustness.json) and [`training/check_runtime_robustness.py`](training/check_runtime_robustness.py).
-
-These checks establish tested behavior, not immunity to data loss. Accuracy fell to 57.75% with a 64-sample outage and 49.25% with one entire channel missing. Neither runtime can recover information that is absent. Prediction agreement is empirical; small floating-point differences can still cross tree thresholds on other inputs.
-
-**Interpretation:** the public demo has been reused during development, including preprocessing selection. Its accuracy is a development result, not an untouched test estimate. The finite-demo score does not predict the score on the organizers' hidden evaluation stream. Colab execution is verified from the supplied archive; hidden-test performance remains unknown.
-
-See [RESULTS.md](RESULTS.md) for candidate comparisons and [APPROACH.md](APPROACH.md) for the method, data checks, and limitations.
+The organizer's materials supply `harness.py` and `competition_api.py`. The default command evaluates the training file; because the final model was fitted on those rows, its training-file accuracy is a compatibility check rather than an independent test result.
 
 ## Method
 
-1. **Preprocess each signal.** Interpolate missing values, replace entirely missing channels with zeros, and apply the selected robust spike filter.
-2. **Extract 231 features.** Describe normalized distributions, local changes, autocorrelation, spectra, and cross-channel behavior.
-3. **Classify with gradient boosting.** Evaluate the exported 200-stage histogram gradient boosting model, with up to 15 leaves per tree, and calibrated class offsets.
+1. **Preprocess the signal.** Interpolate missing values and selected robust spike outliers; replace entirely missing channels with zeros.
+2. **Extract 231 normalized features.** Describe distributions, local changes, autocorrelation, frequency content, and cross-channel behavior.
+3. **Predict with gradient boosting.** Evaluate an exported 200-stage histogram gradient boosting model with up to 15 leaves per tree and calibrated class offsets.
 
-The runtime loads weights relative to `model.py`, handles read-only inputs, and returns one prediction per sample. It uses no metadata, network requests, GPU, training, or background prediction during inference. Vectorized NumPy features and tree traversal avoid runtime compilation. Neither Numba nor scikit-learn is required for inference.
+The final weights were fitted on all **100,000 official training samples**. Feature extraction and tree traversal use vectorized NumPy operations. Weights load relative to `model.py`; each call returns one Python integer in `0`–`7`. Inference preserves read-only inputs and uses no metadata, network requests, GPU, training, or background prediction.
+
+See [APPROACH.md](APPROACH.md) for preprocessing details, calibration, export, and experimental decisions.
+
+## Submission files
+
+| File or directory | Purpose |
+| --- | --- |
+| [`model.py`](model.py) | Top-level entry point defining `class Model` |
+| [`weights.npz`](weights.npz) | Trained model parameters; approximately **0.67 MB** |
+| [`fast_numpy_features.py`](fast_numpy_features.py) | Inference preprocessing and feature extraction |
+| [`requirements.txt`](requirements.txt) | Pinned NumPy dependency |
+| [`verify_colab.ipynb`](verify_colab.ipynb) | Self-contained model verification notebook |
+| [`training/`](training/) | Training, export, and verification utilities |
+| [`APPROACH.md`](APPROACH.md), [`RESULTS.md`](RESULTS.md) | Methodology, comparisons, and limitations |
+| [`evidence/colab/2026-11-12/`](evidence/colab/2026-11-12/) | Archived Colab results and provenance |
+| [`VERIFICATION.json`](VERIFICATION.json), [`MANIFEST.json`](MANIFEST.json) | Verification summary and SHA-256 file hashes |
+
+All required inference files are committed. No file exceeds GitHub's 100 MB limit; Git LFS is not required. Earlier feature implementations remain available for development history and are not imported by the current entry point.
 
 ## Verify in Google Colab
 
-1. Open [the Colab notebook](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb), or download [`verify_colab.ipynb`](verify_colab.ipynb) and upload it to Colab.
+1. Open the notebook using the badge above, or download [`verify_colab.ipynb`](verify_colab.ipynb) and upload it to Colab.
 2. Select a **CPU runtime**, connect, and choose **Runtime → Run all**.
-3. Review the file-integrity checks, prediction checks, and three official evaluator runs. The final cell downloads the model package and evaluation results.
+3. Review the integrity checks, prediction checks, and three official evaluation runs. The final cell downloads the submission package and results.
 
-The notebook embeds the model, weights, public demo, and unmodified official harness. An uploaded copy needs no GitHub sign-in or Google Drive mount. NumPy installs in a separate folder; installation is separate from model setup. The checks enforce setup under 10 seconds and all 400 predictions under 10 seconds. Run the notebook to measure performance on the assigned Colab CPU.
+The notebook embeds the exact model, public demo, and unmodified official harness/API. An uploaded copy needs no GitHub sign-in or Google Drive mount. Package installation is separate from model setup.
 
-The archived Colab run passed these checks. Its [raw results and provenance](evidence/colab/2026-11-12/VERIFICATION.json) are included for review; rerunning the notebook measures the currently assigned machine.
+## Reliability and interpretation
 
-## Repository guide
+- **Input handling:** 22 numerical edge cases passed, including all-NaN signals, constants, sparse observations, and extreme float32 values. Input preservation, repeated predictions, and 100 metadata-independence checks also passed.
+- **Runtime agreement:** the current implementation matched the previous compiled model on 5,000 additional training signals and 2,800 declared stress cases. This is observed class agreement, not bitwise equivalence on every possible input. See [the robustness report](evidence/latest/fast_setup_robustness.json).
+- **Missing information:** severe data loss still reduces accuracy. The declared 64-sample outage test reached 57.75%; losing an entire channel reached 49.25%.
+- **Evaluation limits:** the public demo was reused during development. Reported accuracy is a development result; hidden-test accuracy and rank remain unknown. The finite-demo score does not forecast the official hidden-stream score.
+- **Startup tradeoff:** removing compilation shortens setup but slows individual predictions relative to the [earlier compiled runtime](https://github.com/citraaparamithaaa-dev/gdg-uam/tree/5e08d476da89d183489effd9eabc74ac7ee27671). Under the competition's fixed prediction-time budget, this can reduce the number of samples scored.
 
-| Path | Purpose |
-| --- | --- |
-| [`model.py`](model.py) | Competition entry point and tree inference |
-| [`weights.npz`](weights.npz) | Trained tree parameters, feature indices, and class offsets |
-| [`fast_numpy_features.py`](fast_numpy_features.py) | Selected preprocessing and vectorized feature extraction |
-| [`core_features.py`](core_features.py), [`fused_features.py`](fused_features.py) | Earlier compiled feature implementations, retained for development history |
-| [`requirements.txt`](requirements.txt) | Pinned inference dependencies |
-| [`verify_colab.ipynb`](verify_colab.ipynb) | Self-contained verification notebook |
-| [`training/`](training/) | Training, export, packaging, and verification utilities |
-| [`APPROACH.md`](APPROACH.md), [`RESULTS.md`](RESULTS.md) | Method and experimental results |
-| [`evidence/latest/`](evidence/latest/) | Recorded audits, comparisons, and runtime checks |
-| [`evidence/colab/2026-11-12/`](evidence/colab/2026-11-12/) | Verified supplied Colab results, model hashes, and provenance |
-| [`VERIFICATION.json`](VERIFICATION.json) | Machine-readable verification summary |
-| [`MANIFEST.json`](MANIFEST.json) | SHA-256 file hashes; excludes the manifest itself |
-
-## Submission notes
-
-The repository must be public or shared with the organizers' designated GitHub accounts so they can clone it. Organizer access has not been independently confirmed. Team and member details should accompany the submission through the organizers' required channel; no submission email has been sent by this project.
-
-AI coding assistance was used in implementation, experimentation, and documentation. The method and its limitations are documented for review.
+AI coding assistance contributed to implementation, experiments, and documentation. Supporting evidence and methodological limitations are included for review.
