@@ -1,0 +1,125 @@
+{
+  "model": "C:\\lomba\\catboost-candidate\\model.py",
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scored_samples": 400,
+  "accuracy": 0.7925,
+  "correct": 317,
+  "class_recall": [
+    0.72,
+    0.96,
+    0.9,
+    0.82,
+    0.94,
+    0.94,
+    0.42,
+    0.64
+  ],
+  "confusion_matrix": [
+    [
+      36,
+      0,
+      1,
+      11,
+      1,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      48,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      45,
+      2,
+      0,
+      1,
+      0,
+      1
+    ],
+    [
+      4,
+      0,
+      0,
+      41,
+      0,
+      3,
+      1,
+      1
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      47,
+      2,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      1,
+      47,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      3,
+      2,
+      1,
+      21,
+      23
+    ],
+    [
+      4,
+      0,
+      0,
+      3,
+      0,
+      1,
+      10,
+      32
+    ]
+  ],
+  "finite_demo_score": 2.785745769088388,
+  "setup_seconds": 0.04523970000445843,
+  "full_demo_prediction_seconds": [
+    1.3639667000388727,
+    1.2682774999411777,
+    6.50141440005973
+  ],
+  "median_full_demo_seconds": 1.3639667000388727,
+  "all_repetitions_under_10_seconds": true,
+  "setup_under_120_seconds": true,
+  "valid_python_integer_outputs": true,
+  "immutable_inputs": true,
+  "deterministic": true,
+  "edge_cases_passed": 6,
+  "metadata_independence_checks": 100,
+  "network_disabled_during_import_setup_and_prediction": true,
+  "file_sha256": {
+    "export_verification.json": "3ff8231d0478446f774a420c36e517bc93860f2f52cad06deacadf592ede35bb",
+    "model.py": "ef402c5e188a8deb5182c0b87102e73d34ae0b413b701868d4e1fca185492a92",
+    "numpy_core.py": "3d101027bbf7e4602b005942c9a5aa6b1206a0095c09db929237efbb6a905149",
+    "requirements.txt": "d5074a05bcc216d1e3adeeed5a6717cd820474ee7aea02fdc888260ae48e4f0e",
+    "robust_features.py": "04d880081fd27c53c3a4d48319a97ac5d41aeb9882b19717bed8df1751be6663",
+    "weights.npz": "5557de0655f6f507d4f1d922ff0836a81ab5dfaff46d6f2b60556ff19635d75a"
+  },
+  "largest_file_bytes": 2163369
+}

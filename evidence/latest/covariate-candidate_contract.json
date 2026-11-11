@@ -1,0 +1,123 @@
+{
+  "model": "C:\\lomba\\covariate-candidate\\model.py",
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scored_samples": 400,
+  "accuracy": 0.815,
+  "correct": 326,
+  "class_recall": [
+    0.78,
+    0.98,
+    1.0,
+    0.78,
+    0.94,
+    0.94,
+    0.48,
+    0.62
+  ],
+  "confusion_matrix": [
+    [
+      39,
+      1,
+      3,
+      4,
+      1,
+      1,
+      1,
+      0
+    ],
+    [
+      0,
+      49,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      50,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      6,
+      0,
+      0,
+      39,
+      0,
+      1,
+      1,
+      3
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      47,
+      1,
+      1,
+      0
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      0,
+      47,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      3,
+      2,
+      1,
+      0,
+      24,
+      19
+    ],
+    [
+      5,
+      0,
+      1,
+      2,
+      0,
+      0,
+      11,
+      31
+    ]
+  ],
+  "finite_demo_score": 3.148873978085362,
+  "setup_seconds": 0.015506399911828339,
+  "full_demo_prediction_seconds": [
+    1.1835315000498667,
+    1.224873499944806,
+    1.3144927999237552
+  ],
+  "median_full_demo_seconds": 1.224873499944806,
+  "all_repetitions_under_10_seconds": true,
+  "setup_under_120_seconds": true,
+  "valid_python_integer_outputs": true,
+  "immutable_inputs": true,
+  "deterministic": true,
+  "edge_cases_passed": 6,
+  "metadata_independence_checks": 100,
+  "network_disabled_during_import_setup_and_prediction": true,
+  "file_sha256": {
+    "model.py": "b375737eee209668a884a40d901794fd59425b13d86f29a61716ffc184064f27",
+    "numpy_core.py": "3d101027bbf7e4602b005942c9a5aa6b1206a0095c09db929237efbb6a905149",
+    "requirements.txt": "d5074a05bcc216d1e3adeeed5a6717cd820474ee7aea02fdc888260ae48e4f0e",
+    "weights.npz": "1b823a17404a95172de9801f355d7a94558317d0f2e7e751840b77f23c14e5b1"
+  },
+  "largest_file_bytes": 667441
+}

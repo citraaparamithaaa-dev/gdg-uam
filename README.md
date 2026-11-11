@@ -1,102 +1,49 @@
-# GDG UAM time series classification entry
+# GDG UAM competition model
 
-The reasoning behind every design decision, the shift investigation and the measured results are described in [APPROACH.md](APPROACH.md).
+This is the selected verified entry: **329/400 (82.25%)** on the public demo. The faster runtime retains the existing weights, which were refitted on all 100,000 official training examples.
 
-This repository contains a trained eight-class classifier for the GDG UAM machine learning contest. The selected development configuration is **balanced_core_200**. The submitted weights are refitted on all 100,000 official training rows after model selection. Demo labels are never used for fitting.
+## Run in Colab
 
-## Run the entry
+Open [the verification notebook](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb), select a **CPU** runtime, connect, and choose **Run all**. You can also download [verify_colab.ipynb](verify_colab.ipynb) and upload it through Colab's File menu. The notebook embeds the exact model files, weights, public demo and unmodified official evaluator, so an uploaded copy needs no GitHub login or Google Drive mount.
 
-Use Python 3.12 with the versions in `requirements.txt`. Cold setup (library import and Numba compilation) takes about 18 seconds, well inside the 120 s setup timeout. In the official materials folder:
+Model packages install in a separate folder. Installation and initial compilation take longer than prediction. Moderate compiler optimization reduces cold setup cost. The notebook checks file hashes, prediction safety, the time for all 400 predictions, and three official evaluator runs, then downloads the model and results.
 
-For the evaluation-platform check, [open the CPU verification notebook in Google Colab](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb) and run its cells. The repository URL is already configured.
+**Colab execution remains unverified here.** Run the notebook to measure that CPU. No winning rank or hidden-test accuracy has been established.
 
-```powershell
-python -m pip install -r PATH_TO_THIS_REPOSITORY/requirements.txt
-python harness.py evaluate --model PATH_TO_THIS_REPOSITORY/model.py --source file:data/test_demo.npz
+## Measured local results
+
+| Check | Result |
+|---|---:|
+| Public demo | 329/400 (82.25%) |
+| All 400 predictions, latest three checks | Median 0.694 seconds |
+| Fresh official evaluator runs | Three passed |
+| Exceptions, invalid outputs and timeouts | Zero |
+| Maximum setup time in those fresh runs | 33.96 seconds (limit: 120) |
+| Standalone notebook-payload check | Passed |
+
+The demo has been repeatedly used during development, including earlier preprocessing selection. These are development results. The final-refit model has seen all training-file rows, so its accuracy on those rows is not independent validation. No hard accuracy ceiling has been proved.
+
+The new CatBoost, blended, XGBoost and covariate-weighted candidates reached 79.25%, 82.00%, 81.00% and 81.50% on the demo, respectively. They did not replace the selected model. See [RESULTS.md](RESULTS.md), [APPROACH.md](APPROACH.md), and [evidence/latest](evidence/latest).
+
+## Local evaluation
+
+Use Python 3.12 and the pinned [requirements](requirements.txt). In the organizer's materials directory:
+
+```text
+python -m pip install -r PATH_TO_REPOSITORY/requirements.txt
+python harness.py evaluate --model PATH_TO_REPOSITORY/model.py --source file:data/test_demo.npz --runs 3
 ```
 
-`model.py` defines `Model`. Initialization loads `weights.npz` and compiles CPU prediction routines. Each prediction returns a Python integer from 0 through 7. Missing values are interpolated; entirely missing channels become zeros. Inputs are copied before preprocessing. No label lookup, network request, GPU, training, or background prediction is used during inference. The official API and harness are supplied by the organizer.
+`model.py` defines `Model`. Weights and helpers load relative to that file. Predictions return Python integers in 0..7. The runtime handles missing values, preserves read-only inputs, uses one CPU thread under the official evaluator, and uses no metadata, network access, GPU, training, label lookup, or background prediction during inference. Compilation occurs during setup. The organizer supplies `competition_api.py` and `harness.py`; they must be on the import path.
 
-## Approach
+The original training workflow remains under `training/`. After exporting the balanced 231-feature model, [training/install_fast_runtime.py](training/install_fast_runtime.py) installs this optimized runtime around the numerical weights. Runtime checks and file hashes are in [VERIFICATION.json](VERIFICATION.json) and [MANIFEST.json](MANIFEST.json). The manifest excludes itself.
 
-Each channel is centered and scaled. Features describe its distribution, local changes, autocorrelation, frequency content, and relationships between channels. The structural variant also measures frequency and amplitude changes across time and their behavior in a shared component of channels 0 and 1. The core variant retains the first two channels' shape and spectral features, six channel correlations, and the first two channels' and shared component's structural features. Absolute channel level, absolute channel scale, and metadata are excluded. A histogram gradient boosting classifier is trained on those summaries. Its numerical trees are exported to NumPy arrays and traversed with Numba on one CPU thread. Export parity is checked against the fitted scikit-learn model.
+Before the competition deadline, ensure the organizers can clone the repository, run the Colab check, and send the required team details and repository link. No submission email has been sent from this project update. AI coding assistance was used; team members should be ready to explain the method.
 
-The evaluation-like demo set overlays sparse class-correlated outliers on training-like signals (robust tails 3x heavier; standardized kurtosis 2.8 -> 8.4 within class), so the shipped package despikes each sample before feature extraction: values beyond 4.5 robust deviations (median/MAD) are replaced by linear interpolation between non-outlier neighbors (`core_features.despike_interp`, bitwise-equal to the numpy reference) (`core_features.despike`, bitwise-equal to the numpy reference). This raised demo accuracy from 77.25% to 81.5% (median fill) and then 82.25% (interpolation fill), and the demo score from 2.565 to 3.292 (`evidence/despiked_demo/`, `evidence/despiking.json`) while leaving clean data untouched (15k-check accuracy 93.61% -> 93.57%) and adding ~0.2 ms of latency. Calibrations fitted on the demo labels were measured honestly (fit on one half, evaluate on the other) and rejected: offsets lose 2.5-4.5 pp out-of-sample and a 6/7 specialist runs at chance.
+Official rules and evaluator: https://github.com/GDG-UAM/ml-contest-materials
 
-Because the score rewards answering more samples within the fixed prediction-time budget, the shipped package computes only the 231 features the classifier reads (`core_features.py`): the pruned extractor skips the unused lag sweeps, difference correlations, and channels 2-3 summaries, and reimplements the retained reductions (pairwise sums, medians, interpolated quantiles) to reproduce the original values bit for bit. `training/check_parity.py` compares both extractors over real, NaN-fuzzed, and pathological inputs; the recorded check covered 604 rows and 139,524 values with zero differences and a 2.4x faster extractor. The official harness on the demo set reproduces the original score 2.5650 and accuracy 77.25% exactly, with mean prediction latency 1.8 ms versus 5.1 ms for the full extractor on the same machine.
+To regenerate the embedded notebook from these files and a local copy of the organizer's materials:
 
-The balanced variant adds eight fixed class offsets to the model's scores. These offsets are calibrated to improve the competition's geometric mean objective using 5,000 rows from the training-file holdout; they never use demo labels. The remaining 15,000 holdout rows are excluded from both classifier fitting and offset calibration. The holdout was consulted during feature selection, so this remains development evidence. The offsets are retained when the classifier is refitted on all training rows.
-
-## Development evidence
-
-All candidates begin with the same stratified seed-42 split: 80,000 training rows and 20,000 held-out rows. Uncalibrated candidates are checked on all 20,000 holdout rows; the balanced candidate uses 5,000 for calibration and 15,000 for checking. The saved split indices are in `evidence/`. Development metrics belong to models fitted on the 80,000 rows, not to the final refit.
-
-| Candidate | Check rows | Held-out accuracy | Demo diagnostic accuracy | Weakest demo class recall |
-| --- | ---: | ---: | ---: | ---: |
-| balanced_core_200 | 15,000 | 87.67% | 76.75% | 44.00% |
-| baseline_300 | 20,000 | 82.41% | 40.25% | 0.00% |
-| baseline_shape_300 | 20,000 | 71.98% | 50.50% | 6.00% |
-| core_structure_200 | 20,000 | 87.96% | 75.25% | 26.00% |
-| relations_150 | 20,000 | 87.05% | 67.75% | 12.00% |
-| relations_300 | 20,000 | 87.39% | 69.00% | 16.00% |
-| shape_150 | 20,000 | 86.20% | 68.75% | 22.00% |
-| structure_150 | 20,000 | 88.51% | 72.50% | 22.00% |
-| structure_300 | 20,000 | 89.00% | 73.75% | 20.00% |
-
-A second training-only split (seed 123) gave 87.33% accuracy. It is a split-sensitivity check, not an untouched test set.
-
-Further attempts measured and rejected at heldout validation: spike-feature and combined 6/7 specialists (chance-level on untouched rows), demo-label offset and specialist calibrations (negative out-of-sample), corruption-augmented training and model ensembles (no transfer). Details in `evidence/despiking.json` and `evidence/class_pairs.json`. Two candidate accuracy improvements for the weak class pairs were built and rejected at the demo gate (`evidence/class_pairs.json`): a class-weighted fit (x2 on classes 6/7) raised the in-distribution check score on two splits but scored 2.23 on demo against 2.565, losing class-6 recall under shift, and a confidence-gated 6/7 specialist was demo-neutral while adding a second-stage model whose thresholds cannot be honestly recalibrated after the final refit. In-distribution gains did not transfer to the evaluation-like distribution.
-
-The 400-row demo contains only 50 examples per class. It was inspected as a distribution-shift diagnostic during development, so its results are not an untouched estimate of hidden-test performance. One changed prediction changes overall demo accuracy by 0.25 percentage points. The validation split follows the training distribution; it can overestimate performance after a distribution shift. Final refit harness results are recorded separately in `evidence/` when available. Finite-file scores cannot be interpreted as the score of an infinite 60-second official stream.
-
-## Final refit harness check
-
-On the supplied 400-row demo, the final refit achieved 77.25% accuracy across three runs with mean finite-file score 2.5650 and 0 failed runs; with inference-time interpolation despiking the same model reaches 82.25% accuracy and score 3.292 (`evidence/interp_demo/`, `evidence/interp_despiking.json`) (`evidence/despiked_demo/`). With the original full extractor these runs took 2.118 ms mean prediction latency on the development machine; the pruned package shipped here reproduces the identical score and accuracy (`evidence/core_demo/`) with 1.8 ms mean latency on a different, slower Windows laptop, where the full extractor measures 5.1 ms. These are local CPU results, not the hidden competition score or a Colab timing result. The notebook `verify_colab.ipynb` is provided for the remaining Colab CPU check.
-
-
-
-## Reproduce training
-
-Keep the competition data out of this repository. The following commands obtain the original materials, add these training scripts, recreate the experiments, refit the selected design, and produce another inference package. Training requires the additional libraries in `training/requirements-training.txt`.
-
-```powershell
-git clone https://github.com/GDG-UAM/ml-contest-materials.git work
-Copy-Item .\training\* .\work\
-Set-Location work
-python -m pip install -r requirements-training.txt
-python download_data.py
-python prepare_split.py
-python train_candidates.py
-python train_structure.py
-python calibrate_bias.py core_structure_200 --out balanced_core_200
-python audit_candidate.py balanced_core_200
-python train_candidates.py --final balanced_core_200
-python export_model.py experiments/balanced_core_200/final.pkl ../refit-package --core
-python check_parity.py --source data/test_demo.npz --weights ../refit-package/weights.npz
+```text
+python training/build_verify_notebook.py --materials PATH_TO_OFFICIAL_MATERIALS --candidate . --evidence evidence/latest/github_checkout_contract.json --output verify_colab.ipynb
 ```
-
-Training settings:
-
-```json
-{
-  "max_iter": 200,
-  "max_leaf_nodes": 15,
-  "learning_rate": 0.08,
-  "l2_regularization": 1.0,
-  "random_state": 42,
-  "early_stopping": false,
-  "max_bins": 128
-}
-```
-
-Training uses four CPU threads for efficiency; the official harness limits inference to one. Seeds and fixed split indices make the workflow repeatable in the tested environment. Small numerical differences across platforms and library versions remain possible. Linux/Colab timing must be checked separately.
-
-## Sources and limits
-
-Official materials: https://github.com/GDG-UAM/ml-contest-materials at commit `fc4566d3e3f54fa31a0daa4e3f99a55d783b021a`.
-
-Training data SHA256: `1c231e9a807c348b34290415f56e7c7b99543a81673a9d3cef1002b1a42e5668`.
-
-Demo data SHA256: `03fce51b3dacfaaa04418c4907def59874c4b6963c0561c9ccac83bbca90aac0`.
-
-This entry was developed with AI coding assistance. Team members should understand and be able to explain the feature extraction, validation limitations, and exported model. Team registration, member details, deadline timezone, repository access for organizers, and submission email are separate administrative steps.

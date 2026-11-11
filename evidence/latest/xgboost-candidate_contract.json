@@ -1,0 +1,125 @@
+{
+  "model": "C:\\lomba\\xgboost-candidate\\model.py",
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scored_samples": 400,
+  "accuracy": 0.81,
+  "correct": 324,
+  "class_recall": [
+    0.72,
+    0.98,
+    0.96,
+    0.88,
+    0.92,
+    0.98,
+    0.34,
+    0.7
+  ],
+  "confusion_matrix": [
+    [
+      36,
+      0,
+      1,
+      11,
+      0,
+      2,
+      0,
+      0
+    ],
+    [
+      0,
+      49,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      48,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      3,
+      0,
+      0,
+      44,
+      0,
+      2,
+      1,
+      0
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      46,
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      49,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      5,
+      0,
+      3,
+      17,
+      24
+    ],
+    [
+      4,
+      0,
+      0,
+      3,
+      0,
+      1,
+      7,
+      35
+    ]
+  ],
+  "finite_demo_score": 2.7398272464520566,
+  "setup_seconds": 0.03581500006839633,
+  "full_demo_prediction_seconds": [
+    1.6833421000046656,
+    1.7268840000033379,
+    2.0022720999550074
+  ],
+  "median_full_demo_seconds": 1.7268840000033379,
+  "all_repetitions_under_10_seconds": true,
+  "setup_under_120_seconds": true,
+  "valid_python_integer_outputs": true,
+  "immutable_inputs": true,
+  "deterministic": true,
+  "edge_cases_passed": 6,
+  "metadata_independence_checks": 100,
+  "network_disabled_during_import_setup_and_prediction": true,
+  "file_sha256": {
+    "export_verification.json": "e83ffc6db559ae18c90662a2ee960c3cacef2a5f7114c0f889dfcda502732adb",
+    "model.py": "160070da3cbaf12e82eb05baa6d5e11ab93e6b5212f8ec053dd410edb5a1175b",
+    "numpy_core.py": "3d101027bbf7e4602b005942c9a5aa6b1206a0095c09db929237efbb6a905149",
+    "requirements.txt": "d5074a05bcc216d1e3adeeed5a6717cd820474ee7aea02fdc888260ae48e4f0e",
+    "robust_features.py": "04d880081fd27c53c3a4d48319a97ac5d41aeb9882b19717bed8df1751be6663",
+    "weights.npz": "4c62290e2c050a9148792dd6439aee2af2b5465a8430cfe8fbb806e9c6d45f25"
+  },
+  "largest_file_bytes": 824448
+}

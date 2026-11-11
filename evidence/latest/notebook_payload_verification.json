@@ -1,0 +1,132 @@
+{
+  "notebook": "C:\\lomba\\accuracy-review\\verify_colab.ipynb",
+  "syntax_verified": true,
+  "embedded_file_hashes_verified": 10,
+  "unpacked_folder": "C:\\lomba\\tmp\\notebook_payload_4c613adc497d",
+  "independent_package_check": {
+    "model": "C:\\lomba\\tmp\\notebook_payload_4c613adc497d\\candidate\\model.py",
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "scored_samples": 400,
+    "accuracy": 0.8225,
+    "correct": 329,
+    "class_recall": [
+      0.72,
+      0.98,
+      0.98,
+      0.82,
+      0.94,
+      0.98,
+      0.5,
+      0.66
+    ],
+    "confusion_matrix": [
+      [
+        36,
+        2,
+        2,
+        6,
+        1,
+        1,
+        2,
+        0
+      ],
+      [
+        0,
+        49,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        49,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        41,
+        0,
+        1,
+        1,
+        3
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        47,
+        1,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        49,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        1,
+        2,
+        0,
+        0,
+        25,
+        21
+      ],
+      [
+        2,
+        0,
+        0,
+        2,
+        0,
+        1,
+        12,
+        33
+      ]
+    ],
+    "finite_demo_score": 3.292375700562305,
+    "setup_seconds": 28.26794599997811,
+    "full_demo_prediction_seconds": [
+      0.3959109999705106,
+      0.36807999992743134,
+      0.4295606999658048
+    ],
+    "median_full_demo_seconds": 0.3959109999705106,
+    "all_repetitions_under_10_seconds": true,
+    "setup_under_120_seconds": true,
+    "valid_python_integer_outputs": true,
+    "immutable_inputs": true,
+    "deterministic": true,
+    "edge_cases_passed": 6,
+    "metadata_independence_checks": 100,
+    "network_disabled_during_import_setup_and_prediction": true,
+    "file_sha256": {
+      "core_features.py": "beb37e3226a6e3b684f96daa46047b49e3df31ca2d4537f03e2748fdc4db1b08",
+      "fused_features.py": "f06df206f727b0ce196a355a6cd35899998655d04b305e0141131ec033384aea",
+      "model.py": "bc5005c69013a3453989501e2333f00d8ec1f8d46c362ba637645df4d555d039",
+      "requirements.txt": "821a15afd8cb03b7285e7b8b24cb910d96747681fa0d1e0b8bb5aa93db8cb77e",
+      "weights.npz": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d"
+    },
+    "largest_file_bytes": 667631
+  },
+  "local_reference_correct": 329,
+  "colab_execution_verified": false
+}

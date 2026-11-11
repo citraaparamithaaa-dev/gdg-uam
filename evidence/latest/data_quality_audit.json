@@ -1,0 +1,223 @@
+{
+  "train_100k": {
+    "rows": 100000,
+    "shape": [
+      100000,
+      4,
+      256
+    ],
+    "label_counts": [
+      15993,
+      14027,
+      13937,
+      11915,
+      11980,
+      12160,
+      10123,
+      9865
+    ],
+    "invalid_labels": 0,
+    "infinity_values": 0,
+    "rows_with_missing": 91422,
+    "missing_values": 743076,
+    "missing_fraction": 0.0072566015625,
+    "all_missing_channels": 0,
+    "constant_channels": 0,
+    "maximum_missing_run": 42,
+    "missing_run_quantiles": [
+      1.0,
+      18.0,
+      24.0,
+      42.0
+    ],
+    "rows_with_robust_tails": 9596,
+    "robust_tail_fraction": 0.000292900390625,
+    "robust_tail_count_quantiles": [
+      0.0,
+      0.0,
+      7.0,
+      57.0
+    ],
+    "maximum_robust_z_quantiles": [
+      3.428727164917486,
+      4.472464833490598,
+      6.204873143641715,
+      62.29967620214294
+    ],
+    "duplicate_groups": 0,
+    "duplicate_extra_rows": 0,
+    "conflicting_duplicate_groups": 0,
+    "classes": {
+      "0": {
+        "rows": 15993,
+        "missing_fraction": 0.00727149182454824,
+        "robust_tail_fraction": 7.699901910210717e-05
+      },
+      "1": {
+        "rows": 14027,
+        "missing_fraction": 0.007248576406216583,
+        "robust_tail_fraction": 8.43796784772225e-05
+      },
+      "2": {
+        "rows": 13937,
+        "missing_fraction": 0.007206886906256727,
+        "robust_tail_fraction": 0.0001301896480591232
+      },
+      "3": {
+        "rows": 11915,
+        "missing_fraction": 0.0073373734525807805,
+        "robust_tail_fraction": 0.000163593684431389
+      },
+      "4": {
+        "rows": 11980,
+        "missing_fraction": 0.007319327785893155,
+        "robust_tail_fraction": 0.0008699394824707846
+      },
+      "5": {
+        "rows": 12160,
+        "missing_fraction": 0.0072561966745476976,
+        "robust_tail_fraction": 0.0008500751696134868
+      },
+      "6": {
+        "rows": 10123,
+        "missing_fraction": 0.007185350655685074,
+        "robust_tail_fraction": 0.00013187404302084362
+      },
+      "7": {
+        "rows": 9865,
+        "missing_fraction": 0.007213990433350228,
+        "robust_tail_fraction": 0.00010315034211860111
+      }
+    },
+    "metadata": {
+      "sample_rate": {
+        "min": 1.0,
+        "max": 2.0
+      },
+      "group": {
+        "A": 33337,
+        "B": 33443,
+        "C": 33220
+      },
+      "level": {
+        "min": -3.9989332252317,
+        "max": 3.998365727581959
+      }
+    }
+  },
+  "test_demo": {
+    "rows": 400,
+    "shape": [
+      400,
+      4,
+      256
+    ],
+    "label_counts": [
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50
+    ],
+    "invalid_labels": 0,
+    "infinity_values": 0,
+    "rows_with_missing": 397,
+    "missing_values": 5651,
+    "missing_fraction": 0.01379638671875,
+    "all_missing_channels": 0,
+    "constant_channels": 0,
+    "maximum_missing_run": 38,
+    "missing_run_quantiles": [
+      6.0,
+      21.0,
+      25.029999999999973,
+      38.0
+    ],
+    "rows_with_robust_tails": 140,
+    "robust_tail_fraction": 0.00088134765625,
+    "robust_tail_count_quantiles": [
+      0.0,
+      3.0,
+      8.019999999999982,
+      15.0
+    ],
+    "maximum_robust_z_quantiles": [
+      3.8803500744852935,
+      15.499101921560202,
+      172.22815084409453,
+      930.3752936354249
+    ],
+    "duplicate_groups": 0,
+    "duplicate_extra_rows": 0,
+    "conflicting_duplicate_groups": 0,
+    "classes": {
+      "0": {
+        "rows": 50,
+        "missing_fraction": 0.01439453125,
+        "robust_tail_fraction": 0.0006640625
+      },
+      "1": {
+        "rows": 50,
+        "missing_fraction": 0.0112890625,
+        "robust_tail_fraction": 0.0008203125
+      },
+      "2": {
+        "rows": 50,
+        "missing_fraction": 0.0127734375,
+        "robust_tail_fraction": 0.00072265625
+      },
+      "3": {
+        "rows": 50,
+        "missing_fraction": 0.0146875,
+        "robust_tail_fraction": 0.00078125
+      },
+      "4": {
+        "rows": 50,
+        "missing_fraction": 0.01740234375,
+        "robust_tail_fraction": 0.00181640625
+      },
+      "5": {
+        "rows": 50,
+        "missing_fraction": 0.01412109375,
+        "robust_tail_fraction": 0.00083984375
+      },
+      "6": {
+        "rows": 50,
+        "missing_fraction": 0.01275390625,
+        "robust_tail_fraction": 0.000703125
+      },
+      "7": {
+        "rows": 50,
+        "missing_fraction": 0.01294921875,
+        "robust_tail_fraction": 0.000703125
+      }
+    },
+    "metadata": {
+      "sample_rate": {
+        "min": 1.0,
+        "max": 2.0
+      },
+      "group": {
+        "A": 132,
+        "B": 141,
+        "C": 127
+      },
+      "level": {
+        "min": -3.943621718176815,
+        "max": 3.9899276503049697
+      }
+    }
+  },
+  "overlap": {
+    "train_validation_signal_overlap": 0,
+    "train_demo_signal_overlap": 0
+  },
+  "interpretation": [
+    "Robust tails are candidates for inspection, not proof of bad data.",
+    "No rows were deleted and original datasets remain unchanged.",
+    "Demo statistics describe distribution shift; demo labels are excluded from all cleaning decisions and fitting."
+  ]
+}

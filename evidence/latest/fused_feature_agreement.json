@@ -1,0 +1,8 @@
+{
+  "samples": 5000,
+  "prediction_mismatches": 0,
+  "mismatch_row_ids": [],
+  "maximum_feature_difference": 1.709743457922741e-14,
+  "maximum_raw_score_difference": 0.21342316700714115,
+  "interpretation": "Algebraically equivalent feature stages can round differently near tree thresholds; no claim of bitwise parity or hidden-set accuracy equivalence."
+}

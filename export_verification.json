@@ -1,10 +1,16 @@
 {
-  "samples_checked": 1000,
-  "prediction_matches": true,
-  "max_raw_score_error": 1.0658141036401503e-14,
-  "trees": 1600,
-  "nodes": 46400,
-  "feature_kind": "structure",
-  "weights_bytes": 667639,
-  "source_model": "experiments\\balanced_core_200\\final.pkl"
+  "weights_sha256": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d",
+  "weights_bytes": 667631,
+  "tree_weights_unchanged": true,
+  "historical_tree_export": "evidence/latest/historical_tree_export.json",
+  "optimized_feature_agreement": {
+    "samples": 5000,
+    "prediction_mismatches": 0,
+    "mismatch_row_ids": [],
+    "maximum_feature_difference": 1.709743457922741e-14,
+    "maximum_raw_score_difference": 0.21342316700714115,
+    "interpretation": "Algebraically equivalent feature stages can round differently near tree thresholds; no claim of bitwise parity or hidden-set accuracy equivalence."
+  },
+  "final_runtime_checks": "VERIFICATION.json",
+  "limitation": "Floating-point reductions can cross tree thresholds; no bitwise parity or hidden-test equivalence is claimed."
 }

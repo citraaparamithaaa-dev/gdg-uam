@@ -1,7 +1,12 @@
 """Portable single-sample inference for an exported gradient-boosted classifier."""
+import os
 from pathlib import Path
 import numpy as np
-from numba import njit
+
+# Bound compilation work during the evaluator's 120-second setup phase.
+os.environ['NUMBA_OPT'] = '1'
+from numba import njit, config
+config.reload_config()
 
 
 @njit(cache=False)
@@ -27,7 +32,8 @@ class Model:
             self.trees = tuple(packed[key] for key in (
                 "roots", "feature", "threshold", "left", "right", "value", "missing_left", "initial"))
         if self.kind == "core":
-            from core_features import despike_interp, features
+            from core_features import despike_interp
+            from fused_features import features
             self.transform = lambda sample: features(despike_interp(sample.series, 4.5))
         elif self.kind == "structure":
             from structure_features import features

@@ -1,0 +1,129 @@
+{
+  "model": "C:\\lomba\\blend-candidate\\model.py",
+  "python": "3.12.10",
+  "numpy": "2.5.4",
+  "scored_samples": 400,
+  "accuracy": 0.82,
+  "correct": 328,
+  "class_recall": [
+    0.8,
+    0.96,
+    0.98,
+    0.82,
+    0.94,
+    0.98,
+    0.38,
+    0.7
+  ],
+  "confusion_matrix": [
+    [
+      40,
+      0,
+      0,
+      8,
+      1,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      48,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      49,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      5,
+      0,
+      0,
+      41,
+      0,
+      2,
+      1,
+      1
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      47,
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      49,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      2,
+      2,
+      2,
+      19,
+      25
+    ],
+    [
+      3,
+      0,
+      0,
+      3,
+      0,
+      2,
+      7,
+      35
+    ]
+  ],
+  "finite_demo_score": 3.021371520173744,
+  "setup_seconds": 0.03631820005830377,
+  "full_demo_prediction_seconds": [
+    1.4809272000566125,
+    2.0251925999764353,
+    6.761460799956694
+  ],
+  "median_full_demo_seconds": 2.0251925999764353,
+  "all_repetitions_under_10_seconds": true,
+  "setup_under_120_seconds": true,
+  "valid_python_integer_outputs": true,
+  "immutable_inputs": true,
+  "deterministic": true,
+  "edge_cases_passed": 6,
+  "metadata_independence_checks": 100,
+  "network_disabled_during_import_setup_and_prediction": true,
+  "file_sha256": {
+    "blend.npz": "f39631df677aac7273f3482eaebb9f2b4c41c7c4212972b141da538be0aae876",
+    "catboost_model.py": "3bc7b39cf2b1de30c96c8dbf807f9a7c17092844f1d40f3b9d1622b3711b9d44",
+    "cat_weights.npz": "5557de0655f6f507d4f1d922ff0836a81ab5dfaff46d6f2b60556ff19635d75a",
+    "export_verification.json": "61313dded558f748d9c6c7ea655d3188ad197a6a33897040deb92cdcca3a422c",
+    "hgb_model.py": "200efc284a22e753b241f189c40789b8eb9f8ca847c77b272e94309a31802e83",
+    "hgb_weights.npz": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d",
+    "model.py": "830bcf22a4810fa27cb49bdff3410cef97204635a8c031bffda6cbf96e6c8871",
+    "numpy_core.py": "3d101027bbf7e4602b005942c9a5aa6b1206a0095c09db929237efbb6a905149",
+    "requirements.txt": "d5074a05bcc216d1e3adeeed5a6717cd820474ee7aea02fdc888260ae48e4f0e",
+    "robust_features.py": "04d880081fd27c53c3a4d48319a97ac5d41aeb9882b19717bed8df1751be6663"
+  },
+  "largest_file_bytes": 2163369
+}
