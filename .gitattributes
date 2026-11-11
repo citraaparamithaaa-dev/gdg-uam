@@ -1,3 +1,5 @@
 * text=auto eol=lf
 *.npz binary
 *.png binary
+# Preserve imported Colab evidence bytes for provenance checks.
+evidence/colab/** -text
