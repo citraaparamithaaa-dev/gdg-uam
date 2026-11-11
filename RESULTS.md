@@ -12,6 +12,8 @@ The unmodified official harness evaluated the exact repository entry point in th
 | 1 | 0.294 s | 1.236 s | 329 | 0 / 0 / 0 |
 | 2 | 0.294 s | 1.241 s | 329 | 0 / 0 / 0 |
 
+A post-publication clone of commit `57a85f3` passed all 114 file hashes, matched the delivered notebook, and passed three additional official runs. Setup was 0.480–0.497 seconds and all 400 predictions took 1.830–1.961 seconds, again with 329 correct answers and no errors or timeouts. See [`fast_setup_fresh_clone`](evidence/latest/fast_setup_fresh_clone). These runs illustrate normal host-load variation; the model files were byte-identical.
+
 All three runs returned the finite-demo score **3.2923757006**. Setup plus scored prediction time was below two seconds in each run; installation, warmup, producer work, and other process overhead are excluded from that sum.
 
 The direct [contract check](evidence/latest/fast_setup_contract.json) passed three 400-prediction repetitions, 22 numerical edge cases, read-only input preservation, deterministic outputs, Python integer return values, and 100 metadata-independence checks. Socket connections were disabled during model import, setup, and prediction. The standalone notebook payload was also restored and executed independently; see [its verification record](evidence/latest/fast_setup_notebook_payload.json).

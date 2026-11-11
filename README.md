@@ -54,13 +54,13 @@ Three runs of the official harness completed successfully using the selected run
 | --- | ---: |
 | Public demo accuracy | **82.25% — 329 / 400** |
 | Official score on the finite demo | 3.2924 |
-| Total model prediction time for all 400 samples | 1.24–1.34 seconds per run |
-| Maximum setup time across the three recorded runs | **0.30 seconds** |
+| Total model prediction time for all 400 samples | 1.24–1.97 seconds per run |
+| Maximum setup time across six repository and fresh-clone runs | **0.50 seconds** |
 | Exceptions, invalid predictions, and timeouts | 0 |
 
-The table's timings come from the committed [official evaluator logs](evidence/latest/fast_setup_official_demo). Prediction time excludes dependency installation, model setup, and warmup. The current runtime performs **no JIT compilation**. Both setup and all 400 predictions were below 10 seconds in every recorded run; the official setup allowance is 120 seconds. Timing varies by machine; these measurements were made locally.
+The table's timings come from the committed [repository evaluator logs](evidence/latest/fast_setup_official_demo) and [post-publication fresh-clone logs](evidence/latest/fast_setup_fresh_clone). Prediction time excludes dependency installation, model setup, and warmup. The current runtime performs **no JIT compilation**. Both setup and all 400 predictions were below 10 seconds in every recorded run; the official setup allowance is 120 seconds. Timing varies by machine; these measurements were made locally.
 
-Compared with the previous compiled runtime, setup fell from 33.96 seconds to 0.30 seconds. Per-sample prediction takes longer: the previous runtime processed all 400 samples in 0.48–0.75 seconds. Since official scoring uses a fixed prediction-time budget, this startup improvement can reduce the number of samples scored on the hidden stream. The earlier compiled version remains available at [commit 5e08d47](https://github.com/citraaparamithaaa-dev/gdg-uam/tree/5e08d476da89d183489effd9eabc74ac7ee27671).
+Compared with the previous compiled runtime, the maximum recorded setup fell from 33.96 seconds to 0.50 seconds. Per-sample prediction takes longer: the previous runtime processed all 400 samples in 0.48–0.75 seconds. Since official scoring uses a fixed prediction-time budget, this startup improvement can reduce the number of samples scored on the hidden stream. The earlier compiled version remains available at [commit 5e08d47](https://github.com/citraaparamithaaa-dev/gdg-uam/tree/5e08d476da89d183489effd9eabc74ac7ee27671).
 
 ### Robustness checks
 

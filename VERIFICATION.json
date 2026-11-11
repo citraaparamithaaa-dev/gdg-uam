@@ -430,5 +430,46 @@
   "colab_execution_verified": false,
   "organizer_clone_access_verified": false,
   "earlier_compiled_commit": "5e08d476da89d183489effd9eabc74ac7ee27671",
-  "tradeoff": "No runtime compilation and faster setup; slower per-sample prediction can reduce fixed-budget hidden-stream throughput. No hidden score improvement is claimed."
+  "tradeoff": "No runtime compilation and faster setup; slower per-sample prediction can reduce fixed-budget hidden-stream throughput. No hidden score improvement is claimed.",
+  "fresh_github_clone_verification": {
+    "commit": "57a85f37629397a08645d59057493cf381c6ec98",
+    "manifest_files_verified": 114,
+    "notebook_matches_delivered_file": true,
+    "official_runs": [
+      {
+        "status": "ok",
+        "n_scored": 400,
+        "n_correct": 329,
+        "setup_time_s": 0.4971276,
+        "model_time_s": 1.9608702000000007,
+        "n_exception": 0,
+        "n_invalid": 0,
+        "n_soft_timeout": 0,
+        "n_hard_timeout": 0
+      },
+      {
+        "status": "ok",
+        "n_scored": 400,
+        "n_correct": 329,
+        "setup_time_s": 0.4815737,
+        "model_time_s": 1.8297666000000015,
+        "n_exception": 0,
+        "n_invalid": 0,
+        "n_soft_timeout": 0,
+        "n_hard_timeout": 0
+      },
+      {
+        "status": "ok",
+        "n_scored": 400,
+        "n_correct": 329,
+        "setup_time_s": 0.48038,
+        "model_time_s": 1.8657969000000012,
+        "n_exception": 0,
+        "n_invalid": 0,
+        "n_soft_timeout": 0,
+        "n_hard_timeout": 0
+      }
+    ]
+  },
+  "maximum_setup_seconds_across_repository_and_clone_runs": 0.4971276
 }
