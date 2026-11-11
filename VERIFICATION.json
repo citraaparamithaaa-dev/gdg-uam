@@ -7,7 +7,7 @@
   "jit_compilation": false,
   "demo_accuracy": 0.8225,
   "correct": 329,
-  "fresh_process_max_setup_seconds": 0.2938283,
+  "fresh_process_max_setup_seconds": 1.433624971,
   "setup_target_seconds": 10,
   "prediction_target_seconds_for_400": 10,
   "official_runs": [
@@ -419,7 +419,8 @@
       "largest_file_bytes": 667631
     },
     "local_reference_correct": 329,
-    "colab_execution_verified": false
+    "colab_execution_verified": false,
+    "scope": "Historical local notebook-payload check; the verified supplied Colab run is recorded separately in colab_verification."
   },
   "runtime_file_sha256": {
     "model.py": "78732d4b15f81d376bebb699805855fc99d8d4e236d379b335cd1f727919180c",
@@ -427,7 +428,7 @@
     "weights.npz": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d",
     "requirements.txt": "738071c1d9633f276433ad6738de256d2bf0d22f66dc4bd3179012bebb63bdd1"
   },
-  "colab_execution_verified": false,
+  "colab_execution_verified": true,
   "organizer_clone_access_verified": false,
   "earlier_compiled_commit": "5e08d476da89d183489effd9eabc74ac7ee27671",
   "tradeoff": "No runtime compilation and faster setup; slower per-sample prediction can reduce fixed-budget hidden-stream throughput. No hidden score improvement is claimed.",
@@ -471,5 +472,136 @@
       }
     ]
   },
-  "maximum_setup_seconds_across_repository_and_clone_runs": 0.4971276
+  "maximum_setup_seconds_across_repository_and_clone_runs": 0.4971276,
+  "colab_verification": {
+    "evidence_directory": "evidence/colab/2026-11-12",
+    "inspected_date": "2026-11-12",
+    "source": "User-provided Google Colab result archive",
+    "source_filename": "BEST_MODEL_COLAB_RESULTS (1).zip",
+    "source_archive_sha256": "47e8dac34847441097a50a6bec5ebac95175a4c4ce42aa9034cfb5f4749dda2b",
+    "repository_commit_at_inspection": "1641d54a7a24dbd1d7ab52ddb3111207ea8f9a28",
+    "notebook_sha256": "9feff08ad05437d82aee8e100b84ed6d68630c1c51af60a7b4f547f87935387d",
+    "notebook_model_identity": "8818b115248bc168f64180eb4d3f07987c209857128ca37d4091ff3697a731c7",
+    "notebook_payload_files_verified": {
+      "candidate/model.py": "78732d4b15f81d376bebb699805855fc99d8d4e236d379b335cd1f727919180c",
+      "candidate/fast_numpy_features.py": "86ee0a13c1b2f2cc824eb47952634ffc228d2500c4a87479ce00d13713b631a7",
+      "candidate/weights.npz": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d",
+      "candidate/requirements.txt": "738071c1d9633f276433ad6738de256d2bf0d22f66dc4bd3179012bebb63bdd1",
+      "harness.py": "2b6c1d7af737273280e3ff83229b7f52a7cf22ae1aac3fe813602e37231d0bec",
+      "competition_api.py": "3c1ccf44ae644687c4de28949172c94c7cb31ba1ce4b95368fad043acd51b92f",
+      "data/test_demo.npz": "03fce51b3dacfaaa04418c4907def59874c4b6963c0561c9ccac83bbca90aac0",
+      "verify_contract.py": "88ef0cf39a27dce567864a0778440792c28cb126369cfe02c02e4872cb6783d5",
+      "local_reference.json": "279fbac73753d46a38c4325b459193542d36011283477a15c418b13e04876646"
+    },
+    "runtime_file_sha256": {
+      "model.py": "78732d4b15f81d376bebb699805855fc99d8d4e236d379b335cd1f727919180c",
+      "fast_numpy_features.py": "86ee0a13c1b2f2cc824eb47952634ffc228d2500c4a87479ce00d13713b631a7",
+      "weights.npz": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d",
+      "requirements.txt": "738071c1d9633f276433ad6738de256d2bf0d22f66dc4bd3179012bebb63bdd1"
+    },
+    "submission_archive_matches_github_runtime": true,
+    "source_code_executed_during_inspection": false,
+    "raw_result_file_sha256": {
+      "COLAB_SUMMARY.json": "54599d9c97ef79970d5a32a0c34eb09e22c8a615046ec74fc65f5dde54bfbc8d",
+      "colab_contract.json": "f2c444763c0b06211b712cf0f8d18cf1985f58f23ab84910eda0e9cc87ad4cb8",
+      "aggregate.json": "51f3138b0bb371264eccaa8ef4605b6a38b12ccf8161c276369b6dd3e50aa105",
+      "leaderboard.csv": "f2ccb9a3830fe65cde09c029a1119478a0e9a560c709e7dc109296f06be6d738",
+      "run_0.json": "14c68d5b94c0b97c210ed0bbe1a84ac5014be21ca2d024056803434247d61dd5",
+      "run_1.json": "2fed80155f8bf7381b884c49216875b74b9f85134c7454e0ad1dae6253fe5f9b",
+      "run_2.json": "0fa9eb9f18da27a3b5928ffe80cfb0f1ef20c9971750bda288b0c1a16f72bd62"
+    },
+    "python": "3.13.18",
+    "numpy": "2.5.4",
+    "official_runs": [
+      {
+        "run": 0,
+        "status": "ok",
+        "n_scored": 400,
+        "n_correct": 329,
+        "accuracy_all": 0.8225,
+        "score": 3.292375700562305,
+        "setup_time_s": 0.844730786,
+        "model_time_s": 1.4703916499999994,
+        "scored_wall_time_s": 1.707938617,
+        "n_exception": 0,
+        "n_invalid": 0,
+        "n_soft_timeout": 0,
+        "n_hard_timeout": 0,
+        "warmup_exceptions": 0,
+        "latency_s": {
+          "mean": 0.0036759791249999997,
+          "median": 0.0035090475,
+          "p95": 0.005449153699999999,
+          "p99": 0.00592528688,
+          "max": 0.006529989
+        }
+      },
+      {
+        "run": 1,
+        "status": "ok",
+        "n_scored": 400,
+        "n_correct": 329,
+        "accuracy_all": 0.8225,
+        "score": 3.292375700562305,
+        "setup_time_s": 1.223224397,
+        "model_time_s": 2.457623637,
+        "scored_wall_time_s": 2.820867939,
+        "n_exception": 0,
+        "n_invalid": 0,
+        "n_soft_timeout": 0,
+        "n_hard_timeout": 0,
+        "warmup_exceptions": 0,
+        "latency_s": {
+          "mean": 0.0061440590925,
+          "median": 0.0054462215,
+          "p95": 0.00831605869999999,
+          "p99": 0.016232679309999984,
+          "max": 0.021306953
+        }
+      },
+      {
+        "run": 2,
+        "status": "ok",
+        "n_scored": 400,
+        "n_correct": 329,
+        "accuracy_all": 0.8225,
+        "score": 3.292375700562305,
+        "setup_time_s": 1.433624971,
+        "model_time_s": 1.821992059,
+        "scored_wall_time_s": 2.087946834,
+        "n_exception": 0,
+        "n_invalid": 0,
+        "n_soft_timeout": 0,
+        "n_hard_timeout": 0,
+        "warmup_exceptions": 0,
+        "latency_s": {
+          "mean": 0.0045549801475,
+          "median": 0.0050288285000000005,
+          "p95": 0.0062660737,
+          "p99": 0.007472286139999996,
+          "max": 0.01077087
+        }
+      }
+    ],
+    "maximum_official_setup_seconds": 1.433624971,
+    "official_all_400_prediction_seconds": [
+      1.4703916499999994,
+      2.457623637,
+      1.821992059
+    ],
+    "maximum_official_all_400_prediction_seconds": 2.457623637,
+    "maximum_single_prediction_seconds": 0.021306953,
+    "direct_contract_all_400_prediction_seconds": [
+      2.8306594020000375,
+      4.127477590000012,
+      2.087278577999996
+    ],
+    "minimum_direct_contract_all_400_prediction_seconds": 2.087278577999996,
+    "maximum_direct_contract_all_400_prediction_seconds": 4.127477590000012,
+    "setup_and_prediction_targets_passed": true,
+    "colab_execution_verified": true,
+    "provenance_note": "Results are verified from the supplied archive, not a separately observed or independently rerun Colab session. Unlabelled timing arrays in COLAB_SUMMARY.json are unordered; per-run mappings come from run_0.json through run_2.json.",
+    "limitations": "Public demo was reused in development. This verifies the supplied run and model identity, not hidden-test accuracy, ranking, organizer clone access, or other hardware."
+  },
+  "maximum_setup_seconds_across_recorded_official_runs": 1.433624971
 }

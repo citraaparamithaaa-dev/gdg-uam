@@ -1,0 +1,26 @@
+{
+  "correct": 329,
+  "samples": 400,
+  "accuracy": 0.8225,
+  "all_400_prediction_seconds": [
+    2.8306594020000375,
+    4.127477590000012,
+    2.087278577999996
+  ],
+  "median_prediction_seconds": 2.8306594020000375,
+  "under_10_seconds": true,
+  "model_setup_seconds": 0.019961667999950805,
+  "setup_under_10_seconds": true,
+  "official_scores": [
+    3.292375700562305,
+    3.292375700562305,
+    3.292375700562305
+  ],
+  "official_setup_seconds": [
+    0.844730786,
+    1.433624971,
+    1.223224397
+  ],
+  "official_runs_passed": 3,
+  "zero_exceptions_and_timeouts": true
+}

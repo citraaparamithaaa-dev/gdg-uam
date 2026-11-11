@@ -1,0 +1,125 @@
+{
+  "model": "/content/gdg_check_8818b11524/candidate/model.py",
+  "python": "3.13.18",
+  "numpy": "2.5.4",
+  "scored_samples": 400,
+  "accuracy": 0.8225,
+  "correct": 329,
+  "class_recall": [
+    0.72,
+    0.98,
+    0.98,
+    0.82,
+    0.94,
+    0.98,
+    0.5,
+    0.66
+  ],
+  "confusion_matrix": [
+    [
+      36,
+      2,
+      2,
+      6,
+      1,
+      1,
+      2,
+      0
+    ],
+    [
+      0,
+      49,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      49,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      4,
+      0,
+      0,
+      41,
+      0,
+      1,
+      1,
+      3
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      47,
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      49,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      1,
+      2,
+      0,
+      0,
+      25,
+      21
+    ],
+    [
+      2,
+      0,
+      0,
+      2,
+      0,
+      1,
+      12,
+      33
+    ]
+  ],
+  "finite_demo_score": 3.292375700562305,
+  "setup_seconds": 0.019961667999950805,
+  "full_demo_prediction_seconds": [
+    2.8306594020000375,
+    4.127477590000012,
+    2.087278577999996
+  ],
+  "median_full_demo_seconds": 2.8306594020000375,
+  "all_repetitions_under_10_seconds": true,
+  "setup_under_120_seconds": true,
+  "setup_under_10_seconds": true,
+  "setup_limit_seconds": 10.0,
+  "valid_python_integer_outputs": true,
+  "immutable_inputs": true,
+  "deterministic": true,
+  "edge_cases_passed": 22,
+  "metadata_independence_checks": 100,
+  "network_disabled_during_import_setup_and_prediction": true,
+  "file_sha256": {
+    "requirements.txt": "738071c1d9633f276433ad6738de256d2bf0d22f66dc4bd3179012bebb63bdd1",
+    "weights.npz": "1bfd5f56935cc7dc30fad631d2b35ba2c15864cde6f5dc2f27af39999dc6855d",
+    "model.py": "78732d4b15f81d376bebb699805855fc99d8d4e236d379b335cd1f727919180c",
+    "fast_numpy_features.py": "86ee0a13c1b2f2cc824eb47952634ffc228d2500c4a87479ce00d13713b631a7"
+  },
+  "largest_file_bytes": 667631
+}

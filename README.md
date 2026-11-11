@@ -15,7 +15,7 @@ The submitted model combines robust signal preprocessing, 231 normalized feature
 | Entry point | [`model.py`](model.py), defining `class Model` |
 | Trained model | [`weights.npz`](weights.npz), approximately 0.67 MB |
 | Dependencies | [`requirements.txt`](requirements.txt): NumPy only |
-| Tested Python version | Python 3.12 |
+| Tested Python versions | Python 3.12 locally; Python 3.13.18 in Colab |
 | Execution | CPU inference; one numerical thread under the official harness |
 | Prediction | One Python integer from `0` to `7` per sample |
 | Training data | All 100,000 examples in the official training file |
@@ -48,19 +48,21 @@ This is the command used for the reported demo results. The official harness and
 
 ## Measured results
 
-Three runs of the official harness completed successfully using the selected runtime. A separate fresh clone of the published GitHub commit also passed three demo runs.
+The selected runtime passed six local official-harness runs, including a fresh GitHub clone, and **three Google Colab runs**. The supplied Colab result archive was checked against the notebook: all nine embedded input files matched, and the four model/package files were byte-identical to this repository.
 
-| Metric | Recorded result |
-| --- | ---: |
-| Public demo accuracy | **82.25% — 329 / 400** |
-| Official score on the finite demo | 3.2924 |
-| Total model prediction time for all 400 samples | 1.24–1.97 seconds per run |
-| Maximum setup time across six repository and fresh-clone runs | **0.50 seconds** |
-| Exceptions, invalid predictions, and timeouts | 0 |
+| Metric | Local: six official runs | Colab: three official runs |
+| --- | ---: | ---: |
+| Public demo accuracy | **82.25% — 329 / 400** | **82.25% — 329 / 400** |
+| Official score on the finite demo | 3.2924 | 3.2924 |
+| Total model prediction time for all 400 samples | 1.24–1.97 seconds | 1.47–2.46 seconds |
+| Maximum model setup time | **0.50 seconds** | **1.44 seconds** |
+| Exceptions, invalid predictions, and timeouts | 0 | 0 |
 
-The table's timings come from the committed [repository evaluator logs](evidence/latest/fast_setup_official_demo) and [post-publication fresh-clone logs](evidence/latest/fast_setup_fresh_clone). Prediction time excludes dependency installation, model setup, and warmup. The current runtime performs **no JIT compilation**. Both setup and all 400 predictions were below 10 seconds in every recorded run; the official setup allowance is 120 seconds. Timing varies by machine; these measurements were made locally.
+The table's timings come from the committed [local evaluator logs](evidence/latest/fast_setup_official_demo), [fresh-clone logs](evidence/latest/fast_setup_fresh_clone), and [Colab results](evidence/colab/2026-11-12). Prediction time excludes dependency installation, model setup, and warmup. The current runtime performs **no JIT compilation**. Both setup and all 400 predictions were below 10 seconds in every recorded run; the official setup allowance is 120 seconds. Colab used Python 3.13.18 and NumPy 2.5.4. Timing varies by machine and load.
 
-Compared with the previous compiled runtime, the maximum recorded setup fell from 33.96 seconds to 0.50 seconds. Per-sample prediction takes longer: the previous runtime processed all 400 samples in 0.48–0.75 seconds. Since official scoring uses a fixed prediction-time budget, this startup improvement can reduce the number of samples scored on the hidden stream. The earlier compiled version remains available at [commit 5e08d47](https://github.com/citraaparamithaaa-dev/gdg-uam/tree/5e08d476da89d183489effd9eabc74ac7ee27671).
+The separate Colab contract check timed all 400 predictions three times at **2.09–4.13 seconds**, also below the 10-second target. Its 22 numerical edge cases, input preservation, repeatability, and 100 metadata checks passed. These direct timings and official-harness timings use different measurement boundaries; both are retained in the [Colab verification record](evidence/colab/2026-11-12/VERIFICATION.json).
+
+The previous compiled runtime recorded local setup up to 33.96 seconds, compared with 0.50 seconds locally and 1.44 seconds in Colab for the current runtime. Per-sample prediction takes longer: the previous runtime processed all 400 samples locally in 0.48–0.75 seconds. Since official scoring uses a fixed prediction-time budget, this startup improvement can reduce the number of samples scored on the hidden stream. The earlier compiled version remains available at [commit 5e08d47](https://github.com/citraaparamithaaa-dev/gdg-uam/tree/5e08d476da89d183489effd9eabc74ac7ee27671).
 
 ### Robustness checks
 
@@ -68,7 +70,7 @@ The new runtime matched the previous model on **5,000 additional training signal
 
 These checks establish tested behavior, not immunity to data loss. Accuracy fell to 57.75% with a 64-sample outage and 49.25% with one entire channel missing. Neither runtime can recover information that is absent. Prediction agreement is empirical; small floating-point differences can still cross tree thresholds on other inputs.
 
-**Interpretation:** the public demo has been reused during development, including preprocessing selection. Its accuracy is a development result, not an untouched test estimate. The finite-demo score does not predict the score on the organizers' hidden evaluation stream. Colab execution and hidden-test performance have not been verified here.
+**Interpretation:** the public demo has been reused during development, including preprocessing selection. Its accuracy is a development result, not an untouched test estimate. The finite-demo score does not predict the score on the organizers' hidden evaluation stream. Colab execution is verified from the supplied archive; hidden-test performance remains unknown.
 
 See [RESULTS.md](RESULTS.md) for candidate comparisons and [APPROACH.md](APPROACH.md) for the method, data checks, and limitations.
 
@@ -88,6 +90,8 @@ The runtime loads weights relative to `model.py`, handles read-only inputs, and 
 
 The notebook embeds the model, weights, public demo, and unmodified official harness. An uploaded copy needs no GitHub sign-in or Google Drive mount. NumPy installs in a separate folder; installation is separate from model setup. The checks enforce setup under 10 seconds and all 400 predictions under 10 seconds. Run the notebook to measure performance on the assigned Colab CPU.
 
+The archived Colab run passed these checks. Its [raw results and provenance](evidence/colab/2026-11-12/VERIFICATION.json) are included for review; rerunning the notebook measures the currently assigned machine.
+
 ## Repository guide
 
 | Path | Purpose |
@@ -101,6 +105,7 @@ The notebook embeds the model, weights, public demo, and unmodified official har
 | [`training/`](training/) | Training, export, packaging, and verification utilities |
 | [`APPROACH.md`](APPROACH.md), [`RESULTS.md`](RESULTS.md) | Method and experimental results |
 | [`evidence/latest/`](evidence/latest/) | Recorded audits, comparisons, and runtime checks |
+| [`evidence/colab/2026-11-12/`](evidence/colab/2026-11-12/) | Verified supplied Colab results, model hashes, and provenance |
 | [`VERIFICATION.json`](VERIFICATION.json) | Machine-readable verification summary |
 | [`MANIFEST.json`](MANIFEST.json) | SHA-256 file hashes; excludes the manifest itself |
 

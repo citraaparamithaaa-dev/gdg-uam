@@ -18,7 +18,23 @@ All three runs returned the finite-demo score **3.2923757006**. Setup plus score
 
 The direct [contract check](evidence/latest/fast_setup_contract.json) passed three 400-prediction repetitions, 22 numerical edge cases, read-only input preservation, deterministic outputs, Python integer return values, and 100 metadata-independence checks. Socket connections were disabled during model import, setup, and prediction. The standalone notebook payload was also restored and executed independently; see [its verification record](evidence/latest/fast_setup_notebook_payload.json).
 
-**Colab execution remains unverified.** Local times cannot certify another machine. The notebook enforces setup below 10 seconds and all 400 predictions below 10 seconds when run on the assigned CPU.
+## Verified Colab results
+
+The user supplied the result archive from the self-contained notebook. Inspection confirmed that all nine embedded notebook input files matched, the submission archive contained the same four runtime files as GitHub, and all recorded checks passed. The runtime and weights required no changes. The environment recorded Python **3.13.18** and NumPy **2.5.4**.
+
+| Colab run | Setup | All 400 predictions | Correct | Exceptions / invalid outputs / timeouts |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 0.845 s | 1.470 s | 329 | 0 / 0 / 0 |
+| 1 | 1.223 s | 2.458 s | 329 | 0 / 0 / 0 |
+| 2 | 1.434 s | 1.822 s | 329 | 0 / 0 / 0 |
+
+All three official runs returned score **3.2923757006**, with setup and all 400 predictions separately below 10 seconds. Scored wall time, including harness coordination and sample delivery, was 1.708–2.821 seconds. The slowest individual prediction was 21.31 ms, below the official 500 ms soft timeout.
+
+The direct contract check separately measured all 400 predictions at **2.831 s, 4.127 s, and 2.087 s** (median 2.831 s). It passed 22 numerical edge cases, read-only input preservation, deterministic outputs, valid Python integer returns, and 100 metadata checks, with socket connections disabled. Its 0.020-second setup timer starts after NumPy imports, so the official harness's larger setup measurements are the headline figures.
+
+Raw reports are preserved in [`evidence/colab/2026-11-12`](evidence/colab/2026-11-12); [its verification record](evidence/colab/2026-11-12/VERIFICATION.json) includes the source archive SHA-256, exact runtime hashes, and integrity checks. Per-run mappings above come from the individual run files: the original summary's timing arrays are not ordered by run ID. The folder date is the archive-inspection date, not a claim about the Colab execution timestamp.
+
+This verifies the supplied Colab result archive; the inspection did not independently rerun the Colab session. Times vary by assigned CPU and load. Hidden-test performance and organizer repository access remain unverified.
 
 ## Startup and throughput tradeoff
 

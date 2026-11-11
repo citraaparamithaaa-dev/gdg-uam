@@ -44,4 +44,6 @@ The earlier compiled model had the shortest median whole-demo prediction time in
 
 ## Limits
 
-The public demo has only 400 samples and has been reused. The holdout informed development decisions, and final training-file accuracy is resubstitution accuracy. No hidden evaluation set was accessed, no hard accuracy ceiling has been demonstrated, and no winning rank is guaranteed. Colab must still be checked by running `verify_colab.ipynb`.
+The public demo has only 400 samples and has been reused. The holdout informed development decisions, and final training-file accuracy is resubstitution accuracy. No hidden evaluation set was accessed, no hard accuracy ceiling has been demonstrated, and no winning rank is guaranteed.
+
+The supplied Colab result archive matched all nine embedded notebook input files and the repository's four runtime files. On Python 3.13.18 with NumPy 2.5.4, three official runs each returned 329/400 correct, with setup at 0.845–1.434 seconds and all 400 predictions at 1.470–2.458 seconds. There were zero exceptions, invalid outputs, or timeouts. Separate direct checks took 2.087–4.127 seconds for all 400 samples and passed all 22 numerical edge cases. This verifies the supplied Colab run, not performance on every assigned machine. See [the archived Colab evidence](evidence/colab/2026-11-12/VERIFICATION.json).
