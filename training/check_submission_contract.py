@@ -17,6 +17,8 @@ ROOT=Path(__file__).resolve().parent
 parser=argparse.ArgumentParser()
 parser.add_argument('--model',type=Path,required=True)
 parser.add_argument('--report',type=Path,required=True)
+parser.add_argument('--data',type=Path,default=Path('data/test_demo.npz'))
+parser.add_argument('--max-setup-seconds',type=float,default=10.0)
 args=parser.parse_args()
 folder=args.model.resolve().parent
 sys.path.insert(0,str(folder))
@@ -34,7 +36,7 @@ sys.modules[spec.name]=module
 spec.loader.exec_module(module)
 model=module.Model()
 setup=time.perf_counter()-start
-ds=load_dataset(ROOT/'data/test_demo.npz')
+ds=load_dataset(args.data)
 samples=list(ds)
 durations=[]
 predictions=None
@@ -52,6 +54,18 @@ edge_arrays[3][:,20:62]=np.nan
 edge_arrays[4][0]=np.nan
 edge_arrays[5][:,0]=np.nan
 edge_arrays[5][:,-1]=np.nan
+rng=np.random.default_rng(20261112)
+for count in (0,1,9,10,19,20,128,256):
+    array=np.full((4,256),np.nan,np.float32)
+    array[:,:count]=rng.normal(size=(4,count)).astype(np.float32)
+    edge_arrays.append(array)
+for value in (0.,1.,-1.,np.finfo(np.float32).max,-np.finfo(np.float32).max,np.finfo(np.float32).tiny):
+    edge_arrays.append(np.full((4,256),value,np.float32))
+array=np.zeros((4,256),np.float32)
+array[:,::2]=np.finfo(np.float32).max
+array[:,1::2]=-np.finfo(np.float32).max
+edge_arrays.append(array)
+edge_arrays.append(rng.choice([np.inf,-np.inf,np.nan,0.,1.],size=(4,256)).astype(np.float32))
 for array in edge_arrays:
     before=array.copy()
     sample=Sample(array,{})
@@ -77,6 +91,7 @@ report=dict(model=str(folder/'model.py'),python=sys.version.split()[0],numpy=np.
     class_recall=recall.tolist(),confusion_matrix=confusion.tolist(),finite_demo_score=float(np.exp(np.log(terms).mean())),
     setup_seconds=setup,full_demo_prediction_seconds=durations,median_full_demo_seconds=float(np.median(durations)),
     all_repetitions_under_10_seconds=all(t<10 for t in durations),setup_under_120_seconds=setup<120,
+    setup_under_10_seconds=setup<10,setup_limit_seconds=args.max_setup_seconds,
     valid_python_integer_outputs=True,immutable_inputs=True,deterministic=True,edge_cases_passed=len(edge_arrays),
     metadata_independence_checks=100,network_disabled_during_import_setup_and_prediction=True,
     file_sha256=files,largest_file_bytes=max(p.stat().st_size for p in folder.iterdir() if p.is_file()))
@@ -85,4 +100,5 @@ args.report.write_text(json.dumps(report,indent=2))
 print(json.dumps({k:v for k,v in report.items() if k not in ('file_sha256','confusion_matrix')},indent=2),flush=True)
 assert report['all_repetitions_under_10_seconds'],report
 assert report['setup_under_120_seconds'],report
+assert setup<args.max_setup_seconds,report
 assert report['largest_file_bytes']<100_000_000

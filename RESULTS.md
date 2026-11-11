@@ -1,55 +1,77 @@
-# Final model selection â€” 11 November 2026
+# Model results — 12 November 2026
 
-The best verified demo accuracy remains **329/400 (82.25%)**. No completed new candidate improved it. The selected package uses the existing trained weights with the faster feature implementation.
+The current submission uses **NumPy-only inference with no runtime compilation**. It retains the selected trained weights and **329/400 (82.25%)** public-demo accuracy, while reducing model setup below the requested 10 seconds. Installation time is separate from model setup.
 
-| Candidate | Correct | Demo accuracy | Official finite-demo score |
-|---|---:|---:|---:|
-| Selected fast model | 329/400 | 82.25% | 3.2924 |
-| CatBoost | 317/400 | 79.25% | 2.7857 |
-| CatBoost/HGB blend | 328/400 | 82.00% | 3.0214 |
-| XGBoost | 324/400 | 81.00% | 2.7398 |
-| Covariate weighting | 326/400 | 81.50% | 3.1489 |
+## Current runtime
 
-The same 400 samples were used for the demo comparisons. These results are development evidence because this small demo has been reused. The scores above describe a finite 400-sample file, not the official 60-second hidden stream.
+The unmodified official harness evaluated the exact repository entry point in three fresh processes. Complete records are in [`evidence/latest/fast_setup_official_demo`](evidence/latest/fast_setup_official_demo).
 
-## What was tested
+| Run | Setup | All 400 predictions | Correct | Exceptions / invalid outputs / timeouts |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 0.286 s | 1.334 s | 329 | 0 / 0 / 0 |
+| 1 | 0.294 s | 1.236 s | 329 | 0 / 0 / 0 |
+| 2 | 0.294 s | 1.241 s | 329 | 0 / 0 / 0 |
 
-The data-quality audit covered all 100,000 training samples and all 400 demo samples. Three consistent cleaning pipelines were compared. Interpolation alone gave 87.67% natural validation accuracy, Hampel filtering 87.62%, and Savitzky-Golay smoothing 86.81%. There were no duplicate signals, invalid class labels, infinities, empty channels or constant channels. Missingness and robust tails were greater in the demo.
+All three runs returned the finite-demo score **3.2923757006**. Setup plus scored prediction time was below two seconds in each run; installation, warmup, producer work, and other process overhead are excluded from that sum.
 
-The additional campaign compared three CatBoost configurations, XGBoost, bounded covariate weighting learned from unlabeled demo signals, and five declared CatBoost/HGB mixture weights. Models used the same 80,000 training / 5,000 calibration / 15,000 validation split. The selected classifiers were refitted on all 100,000 training rows. XGBoost achieved 88.41% natural validation accuracy and the blend 88.29%, but their demo accuracies were lower. The new covariate-weighting method did not use demo class labels to estimate weights.
+The direct [contract check](evidence/latest/fast_setup_contract.json) passed three 400-prediction repetitions, 22 numerical edge cases, read-only input preservation, deterministic outputs, Python integer return values, and 100 metadata-independence checks. Socket connections were disabled during model import, setup, and prediction. The standalone notebook payload was also restored and executed independently; see [its verification record](evidence/latest/fast_setup_notebook_payload.json).
 
-The new boosting models were exported to numerical arrays and tested against their native evaluators on 1,000 feature vectors. Their runtimes need no CatBoost or scikit-learn. The final selected fast entry needs only NumPy and Numba. It retains the established global despiking at inference; its original training features were unclipped. That preprocessing mismatch and the reused demo are disclosed rather than treated as independent generalization evidence.
+**Colab execution remains unverified.** Local times cannot certify another machine. The notebook enforces setup below 10 seconds and all 400 predictions below 10 seconds when run on the assigned CPU.
 
-## Runtime and requirements
+## Startup and throughput tradeoff
 
-The selected model's latest direct check passed three whole-demo repetitions below 10 seconds, valid Python integer returns, six pathological/missing-data cases, unchanged inputs, deterministic repeated predictions, and 100 metadata-independence checks. Socket connections were disabled during model import, setup and prediction. The fresh packaged copy took at most 71.35 seconds for setup across three official runs, within the 120-second limit.
+The prior compiled runtime, available at commit `5e08d47`, recorded setup up to 33.96 seconds and 0.48–0.75 seconds to predict all 400 samples. The current runtime avoids compilation and requires only NumPy, but takes longer per prediction. The official score depends on the number and quality of predictions within a fixed 60-second prediction-time budget, so lower setup time does not by itself improve competition score. No hidden-stream comparison or winning rank has been established.
 
-The official evaluator runs models in fresh processes, limits numerical libraries to one CPU thread, permits 120 seconds for setup, and stops scoring at 60 cumulative prediction seconds. Calls over 0.5 seconds count as wrong and calls over 0.75 seconds can terminate a run. The official source checksum is `bb362375823362ac6ddde3ec170e1d091fd5988d208f35b9352c8c30e327ca82`; the official harness is unmodified.
+Earlier compiled-runtime evidence is retained in [`evidence/latest/official_demo`](evidence/latest/official_demo) and [`compiled_runtime_verification.json`](evidence/latest/compiled_runtime_verification.json). Those timing records describe the previous runtime.
 
-The final notebook embeds the exact runtime files, trained weights, public demo, unmodified organizer evaluator/API, and integrity hashes. It installs the model's dependencies in a separate folder, then runs prediction safety checks and three official evaluation processes. It downloads the results and a submission archive. It does not need a GitHub login or a Google Drive mount. Its payload is also unpacked and executed locally to verify that it is self-contained.
+## Robustness and prediction agreement
 
-**Colab execution is not yet verified.** Local times cannot certify the speed on a different Colab CPU. Run the delivered notebook on a CPU runtime and keep its resulting summary.
+The NumPy runtime matched the prior compiled model's class predictions on 5,000 additional training signals sampled with seed `20261112`. Maximum retained-feature difference was approximately `4.09e-14`; maximum raw-score difference was `0.490`, because tiny feature changes can cross tree thresholds. Zero observed class disagreements do not establish bitwise equivalence or agreement on every future input.
 
-## Submission administration
+The following checks each used all 400 demo signals with declared synthetic perturbations. Both runtimes returned the same classes in all 2,800 cases, with zero exceptions, invalid outputs, runtime warnings, input mutations, or inconsistent repeated answers.
 
-The user confirmed that registration is complete. Team and member names will be provided later. Organizer access to the GitHub repository remains unverified, no submission email has been sent, and the supplied official slides list 12 November at 23:59 without specifying a timezone. This repository update contains the selected runtime and notebook. Submission to the organizers is a separate step.
+| Condition | Correct / 400 | Accuracy |
+| --- | ---: | ---: |
+| Natural demo | 329 | 82.25% |
+| Randomly missing 10% of values | 310 | 77.50% |
+| Randomly missing 30% of values | 312 | 78.00% |
+| Contiguous 64-sample outage in every channel | 231 | 57.75% |
+| One entire channel missing | 197 | 49.25% |
+| Added spikes at 1% of positions | 321 | 80.25% |
+| Common positive gain and offset changes | 329 | 82.25% |
 
-Earlier documents claiming an 84â€“85% accuracy ceiling or presenting final-refit training-file accuracy as independent validation should not be used as evidence. No such ceiling or independent hidden-test result has been demonstrated.
+These perturbations measure specified behavior rather than hidden-test accuracy. Robust input handling does not prevent accuracy loss when discriminating information is missing. Numerical edge cases include NaN-only and constant signals, sparse finite observations, extreme float32 magnitudes, and infinity handling beyond the official NaN contract.
 
-## Reproduction
+Full evidence: [`fast_setup_robustness.json`](evidence/latest/fast_setup_robustness.json). To reproduce the comparison, first obtain a separate checkout of the compiled runtime at commit `5e08d47`, then run:
 
-Training requirements include the pinned project dependencies plus CatBoost 1.2.10, XGBoost 3.4.1 and pandas 3.1.1. The original selected model training scripts remain in `training/`. The additional rejected trials are recorded in `evidence/latest/`. Their workspace runners are not required for inference or submission.
+```bash
+python training/check_runtime_robustness.py --reference PATH_TO_COMPILED_CHECKOUT --candidate . --materials PATH_TO_OFFICIAL_MATERIALS --out robustness.json
+```
 
-Official rules and evaluator: https://github.com/GDG-UAM/ml-contest-materials
+The comparison needs NumPy and Numba to run the older reference, plus the official training and demo files. Inference with the current submission requires NumPy alone.
 
-## Final delivered package checks
+## Model selection and data preparation
 
-The exact selected folder passed three fresh official runs: **329/400 (82.25%)**, score **3.2923757**, zero invalid outputs, exceptions or timeouts. Maximum fresh setup was **71.35 seconds**. In the final five interleaved timing repetitions, all 400 predictions took a median **1.381 seconds**, with every repetition below 10 seconds.
+| Final candidate | Correct / 400 | Demo accuracy | Finite-demo score |
+| --- | ---: | ---: | ---: |
+| Selected weights, current NumPy runtime | 329 | 82.25% | 3.2924 |
+| CatBoost | 317 | 79.25% | 2.7857 |
+| CatBoost/HGB blend | 328 | 82.00% | 3.0214 |
+| XGBoost | 324 | 81.00% | 2.7398 |
+| Covariate weighting | 326 | 81.50% | 3.1489 |
 
-The exact notebook payload passed syntax and embedded-file hash checks, was restored into an independent folder, and reproduced 329 correct predictions. Its independent local check passed setup under 120 seconds, all three 400-prediction repetitions under 10 seconds, pathological NaN/constant inputs, unchanged inputs, repeatability, metadata independence and disabled socket connections. These are local checks; the notebook must still be run in Colab to certify that machine.
+The data audit covered all 100,000 training and 400 demo signals. It found no duplicate signals, invalid labels, infinities, empty channels, or constant channels. Missing values and robust tails were more frequent in the demo.
 
-## Published runtime startup improvement
+Three consistently applied cleaning pipelines were compared on fixed training-file partitions: interpolation reached 87.67% natural validation accuracy, Hampel filtering 87.62%, and Savitzky–Golay smoothing 86.81%. Additional experiments compared three CatBoost configurations, XGBoost, five declared blend weights, and bounded covariate weighting learned from unlabeled demo signals. XGBoost reached 88.41% natural validation accuracy and the blend 88.29%, but neither improved the public demo. The selected tree weights were refitted on all 100,000 training rows.
 
-The final publication adds Numba optimization level 1, leaving numerical thread limits unchanged. This reduces cold compilation cost. The earlier matched benchmark predates this setting.
+The selected inference preprocessing retains the established spike interpolation; its original training features were unclipped. That mismatch and the repeated use of the demo are development limitations. Final-refit accuracy on the training file is not independent validation. No hidden evaluation data was accessed, and no hard accuracy ceiling has been demonstrated.
 
-The updated runtime reproduced 329/400 (82.25%). Three fresh official runs passed with zero exceptions, invalid outputs or timeouts; maximum setup was 33.96 seconds. The latest direct whole-demo checks had median prediction time 0.694 seconds. The rebuilt notebook's exact payload was also tested independently. Colab execution remains unverified.
+## Reproduction and submission
+
+The current entry point, trained weights, inference dependency pins, notebook, and file hashes are committed. The notebook embeds the exact model, public demo, and unmodified official evaluator/API, checks integrity, runs prediction checks, and evaluates three fresh processes. It downloads the results and a submission archive without requiring a Drive mount.
+
+Training and historical model comparisons require additional development dependencies, including scikit-learn, Numba, CatBoost, XGBoost, and pandas. See [`training/`](training/) and the recorded evidence for the original workflows. These packages are not required to run the current exported model.
+
+Organizer clone access remains unverified. Registration is complete; team and member names will be provided separately. No submission email has been sent. The supplied slides list 12 November at 23:59 without a timezone, so the organizer's deadline interpretation should govern submission.
+
+Official rules and evaluator: [GDG-UAM/ml-contest-materials](https://github.com/GDG-UAM/ml-contest-materials).

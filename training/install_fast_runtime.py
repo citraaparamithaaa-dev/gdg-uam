@@ -17,7 +17,7 @@ if not np.array_equal(arrays['indices'],expected):
 arrays['kind']=np.asarray('core')
 args.out.mkdir(parents=True,exist_ok=True)
 np.savez_compressed(args.out/'weights.npz',**arrays)
-for name in ('model.py','core_features.py','fused_features.py','requirements.txt'):
+for name in ('model.py','fast_numpy_features.py','requirements.txt'):
     if (repo/name).resolve()!=(args.out/name).resolve():
         shutil.copyfile(repo/name,args.out/name)
 print('Fast runtime installed:',args.out)

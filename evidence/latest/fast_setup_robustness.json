@@ -1,0 +1,101 @@
+{
+  "reference": "Published Numba model at commit 5e08d47",
+  "comparison": {
+    "samples": 5000,
+    "seed": 20261112,
+    "prediction_mismatches": 0,
+    "mismatch_row_ids": [],
+    "maximum_feature_difference": 4.085620730620576e-14,
+    "maximum_raw_score_difference": 0.48992569499085104,
+    "elapsed_seconds": 39.1034088000888,
+    "interpretation": "Empirical prediction agreement, not bitwise equivalence or independent accuracy validation."
+  },
+  "stress_tests": {
+    "natural": {
+      "samples": 400,
+      "old_correct": 329,
+      "new_correct": 329,
+      "prediction_disagreements": 0,
+      "errors": 0,
+      "invalid_outputs": 0,
+      "input_mutations": 0,
+      "nondeterministic_outputs": 0,
+      "runtime_warnings": 0,
+      "elapsed_seconds": 3.415820900001563
+    },
+    "missing_10pct": {
+      "samples": 400,
+      "old_correct": 310,
+      "new_correct": 310,
+      "prediction_disagreements": 0,
+      "errors": 0,
+      "invalid_outputs": 0,
+      "input_mutations": 0,
+      "nondeterministic_outputs": 0,
+      "runtime_warnings": 0,
+      "elapsed_seconds": 2.6523181999800727
+    },
+    "missing_30pct": {
+      "samples": 400,
+      "old_correct": 312,
+      "new_correct": 312,
+      "prediction_disagreements": 0,
+      "errors": 0,
+      "invalid_outputs": 0,
+      "input_mutations": 0,
+      "nondeterministic_outputs": 0,
+      "runtime_warnings": 0,
+      "elapsed_seconds": 2.8496099000331014
+    },
+    "outage_64": {
+      "samples": 400,
+      "old_correct": 231,
+      "new_correct": 231,
+      "prediction_disagreements": 0,
+      "errors": 0,
+      "invalid_outputs": 0,
+      "input_mutations": 0,
+      "nondeterministic_outputs": 0,
+      "runtime_warnings": 0,
+      "elapsed_seconds": 2.842877000104636
+    },
+    "one_channel_missing": {
+      "samples": 400,
+      "old_correct": 197,
+      "new_correct": 197,
+      "prediction_disagreements": 0,
+      "errors": 0,
+      "invalid_outputs": 0,
+      "input_mutations": 0,
+      "nondeterministic_outputs": 0,
+      "runtime_warnings": 0,
+      "elapsed_seconds": 2.6505402999464422
+    },
+    "spikes_1pct": {
+      "samples": 400,
+      "old_correct": 321,
+      "new_correct": 321,
+      "prediction_disagreements": 0,
+      "errors": 0,
+      "invalid_outputs": 0,
+      "input_mutations": 0,
+      "nondeterministic_outputs": 0,
+      "runtime_warnings": 0,
+      "elapsed_seconds": 3.0059037999017164
+    },
+    "gain_and_offset": {
+      "samples": 400,
+      "old_correct": 329,
+      "new_correct": 329,
+      "prediction_disagreements": 0,
+      "errors": 0,
+      "invalid_outputs": 0,
+      "input_mutations": 0,
+      "nondeterministic_outputs": 0,
+      "runtime_warnings": 0,
+      "elapsed_seconds": 2.737882799934596
+    }
+  },
+  "numerical_edge_cases": 16,
+  "note": "Synthetic corruptions measure behavior under declared perturbations, not hidden-test accuracy. Infinity tests extend beyond the NaN input contract."
+}

@@ -8,9 +8,19 @@ Missing values are interpolated, and entirely missing channels become zeros. At 
 
 Features describe the first two channels' distributions, local changes, autocorrelation and spectra; cross-channel correlations; and amplitude/frequency behavior in the first two channels and their shared component. Metadata and absolute level/scale are excluded.
 
-## Faster CPU runtime
+## Current CPU runtime: setup below 10 seconds
 
-`fused_features.py` groups the feature reductions into compiled stages, leaving FFTs and the two small matrix products in NumPy. Keeping matrix products outside compiled functions avoids an optional SciPy BLAS dependency. `core_features.py` supplies the reductions and missing-value/spike handling. `model.py` loads the numerical weights, compiles on a zero sample during setup, and traverses the trees during each prediction. The runtime selects Numba optimization level 1 to reduce cold compilation cost without changing numerical thread limits.
+The current `model.py` and `fast_numpy_features.py` use NumPy alone. They load the same trained numerical weights, process only the retained features, transform 21 spectral windows together, and traverse the trees using vectorized arrays. There is no runtime compilation or dependency on Numba, SciPy, or scikit-learn. Finite and nonfinite values are handled in private float64 copies, preserving read-only inputs.
+
+Three official demo runs of this runtime had setup times of 0.286–0.294 seconds and prediction times of 1.236–1.334 seconds for all 400 samples. Each returned 329 correct predictions with no exceptions, invalid outputs, or timeouts. Package installation is outside these timings.
+
+A comparison against the previous compiled model found zero class disagreements on 5,000 additional training signals and all 2,800 declared stress cases. Small feature differences still caused some raw-score differences, so this is empirical class agreement rather than bitwise equivalence. Stress accuracy was 77.50% with 10% random missing values, 78.00% with 30% random missing values, 57.75% with a 64-sample outage, 49.25% with a missing channel, 80.25% with 1% added spikes, and 82.25% after gain/offset changes. These are fixed diagnostic perturbations, not estimates of hidden-test performance.
+
+The tradeoff is slower per-sample prediction than the earlier compiled runtime. Under the official fixed prediction-time budget, that can reduce hidden-stream throughput and score. The new runtime meets the requested sub-10-second setup target, while the previous version remains in Git history at commit `5e08d47`.
+
+## Earlier compiled runtime
+
+The earlier runtime's `fused_features.py` groups the feature reductions into compiled stages, leaving FFTs and the two small matrix products in NumPy. Keeping matrix products outside compiled functions avoids an optional SciPy BLAS dependency. `core_features.py` supplies the reductions and missing-value/spike handling. Its entry point compiled on a zero sample during setup, using Numba optimization level 1. These helpers are retained for development history; the current entry point does not import them.
 
 The optimized feature stages have floating-point differences from the earlier implementation. A 5,000-sample comparison had zero prediction disagreements, while raw-score differences occurred when tiny feature changes crossed tree thresholds. This is empirical prediction agreement, not bitwise parity or a guarantee of equality on every input.
 
@@ -30,7 +40,7 @@ Three CatBoost configurations, a regularized XGBoost model, five fixed CatBoost/
 | XGBoost | 81.00% | 2.7398 |
 | Covariate weighting | 81.50% | 3.1489 |
 
-The selected fast model also had the shortest median whole-demo prediction time in the matched comparison. The finite-file score is not a forecast of the official 60-second hidden stream. Historical evidence remains in `evidence/`; the latest comparisons and three fresh official runs are in `evidence/latest/`.
+The earlier compiled model had the shortest median whole-demo prediction time in that matched comparison. The finite-file score is not a forecast of the official 60-second hidden stream. Historical evidence remains in `evidence/`; the latest comparisons and fresh official runs are in `evidence/latest/`.
 
 ## Limits
 

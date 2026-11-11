@@ -21,9 +21,11 @@ candidate=args.candidate.resolve()
 evidence=json.loads(args.evidence.read_text())
 assert evidence['all_repetitions_under_10_seconds']
 assert evidence['setup_under_120_seconds']
+assert evidence['setup_under_10_seconds']
 requirements=[line.strip() for line in (candidate/'requirements.txt').read_text().splitlines() if line.strip()]
 assert requirements and all(re.fullmatch(r'(numpy|numba)==[0-9.]+',r) for r in requirements)
-files={f'candidate/{p.name}':p.read_bytes() for p in candidate.iterdir() if p.is_file() and p.suffix in ('.py','.npz')}
+runtime_names=('model.py','fast_numpy_features.py','weights.npz')
+files={f'candidate/{name}':(candidate/name).read_bytes() for name in runtime_names}
 files['candidate/requirements.txt']=(candidate/'requirements.txt').read_bytes()
 for name in ('harness.py','competition_api.py','data/test_demo.npz'):
     files[name]=(MATERIALS/name).read_bytes()
@@ -45,7 +47,7 @@ cells=[md(f'''# Verified competition model — CPU check
 
 **Local reference: {evidence['correct']}/400 correct ({evidence['accuracy']:.2%}).** This is the selected verified candidate from the completed experiments. Model identity: `{identity[:16]}`.
 
-Choose **Runtime → Change runtime type → CPU**, connect, then **Runtime → Run all**. Setup may take several minutes; the 10-second target applies to all 400 predictions after setup. This notebook loads trained weights and does not train a model.
+Choose **Runtime → Change runtime type → CPU**, connect, then **Runtime → Run all**. Dependency installation is separate from model setup. The NumPy-only model performs no runtime compilation; the checks require model setup under 10 seconds and all 400 predictions under 10 seconds. This notebook loads trained weights and does not train a model.
 
 The notebook contains the model, the public demo, and unmodified official evaluator. It installs model packages in a separate folder, checks all embedded file hashes, tests prediction safety and speed, and runs three official evaluation processes. It needs no GitHub login, Google Drive mounting, or paid runtime.
 
@@ -101,9 +103,11 @@ summary=dict(correct=contract['correct'],samples=400,accuracy=contract['accuracy
              median_prediction_seconds=contract['median_full_demo_seconds'],
              under_10_seconds=contract['all_repetitions_under_10_seconds'],
              model_setup_seconds=contract['setup_seconds'],
+             setup_under_10_seconds=contract['setup_under_10_seconds'],
              official_scores=[r['score'] for r in runs],
              official_setup_seconds=[r['setup_time_s'] for r in runs],official_runs_passed=3,
              zero_exceptions_and_timeouts=True)
+assert all(r['setup_time_s']<10 and r['model_time_s']<10 for r in runs)
 (workspace/'COLAB_SUMMARY.json').write_text(json.dumps(summary,indent=2))
 print(json.dumps(summary,indent=2))
 import shutil
