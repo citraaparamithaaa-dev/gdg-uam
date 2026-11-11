@@ -1,49 +1,102 @@
-# GDG UAM competition model
+# GDG UAM · Time-Series Classification
 
-This is the selected verified entry: **329/400 (82.25%)** on the public demo. The faster runtime retains the existing weights, which were refitted on all 100,000 official training examples.
+A CPU-based submission for the **GDG UAM Machine Learning Competition**, classifying four-channel time series into eight classes.
 
-## Run in Colab
+The submitted model combines robust signal preprocessing, 231 normalized features, and histogram gradient boosting. Trained weights are included; evaluation requires no retraining.
 
-Open [the verification notebook](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb), select a **CPU** runtime, connect, and choose **Run all**. You can also download [verify_colab.ipynb](verify_colab.ipynb) and upload it through Colab's File menu. The notebook embeds the exact model files, weights, public demo and unmodified official evaluator, so an uploaded copy needs no GitHub login or Google Drive mount.
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb)
 
-Model packages install in a separate folder. Installation and initial compilation take longer than prediction. Moderate compiler optimization reduces cold setup cost. The notebook checks file hashes, prediction safety, the time for all 400 predictions, and three official evaluator runs, then downloads the model and results.
+[Evaluation instructions](#evaluate-a-fresh-clone) · [Method](APPROACH.md) · [Results](RESULTS.md) · [Verification evidence](VERIFICATION.json) · [Official competition materials](https://github.com/GDG-UAM/ml-contest-materials)
 
-**Colab execution remains unverified here.** Run the notebook to measure that CPU. No winning rank or hidden-test accuracy has been established.
+## Submission at a glance
 
-## Measured local results
+| Item | Details |
+| --- | --- |
+| Entry point | [`model.py`](model.py), defining `class Model` |
+| Trained model | [`weights.npz`](weights.npz), approximately 0.67 MB |
+| Dependencies | [`requirements.txt`](requirements.txt): NumPy and Numba |
+| Tested Python version | Python 3.12 |
+| Execution | CPU inference; one numerical thread under the official harness |
+| Prediction | One Python integer from `0` to `7` per sample |
+| Training data | All 100,000 examples in the official training file |
 
-| Check | Result |
-|---|---:|
-| Public demo | 329/400 (82.25%) |
-| All 400 predictions, latest three checks | Median 0.694 seconds |
-| Fresh official evaluator runs | Three passed |
-| Exceptions, invalid outputs and timeouts | Zero |
-| Maximum setup time in those fresh runs | 33.96 seconds (limit: 120) |
-| Standalone notebook-payload check | Passed |
+All required weights and helper files are committed to this repository. No file exceeds GitHub's 100 MB limit, and Git LFS is not required.
 
-The demo has been repeatedly used during development, including earlier preprocessing selection. These are development results. The final-refit model has seen all training-file rows, so its accuracy on those rows is not independent validation. No hard accuracy ceiling has been proved.
+## Evaluate a fresh clone
 
-The new CatBoost, blended, XGBoost and covariate-weighted candidates reached 79.25%, 82.00%, 81.00% and 81.50% on the demo, respectively. They did not replace the selected model. See [RESULTS.md](RESULTS.md), [APPROACH.md](APPROACH.md), and [evidence/latest](evidence/latest).
+Use the **unmodified official harness** from the organizer's materials repository. Follow its [setup instructions](https://github.com/GDG-UAM/ml-contest-materials#setup), including downloading `data/train_100k.npz` for the default evaluation command.
 
-## Local evaluation
+Starting from the directory containing the organizer's `harness.py`:
 
-Use Python 3.12 and the pinned [requirements](requirements.txt). In the organizer's materials directory:
-
-```text
-python -m pip install -r PATH_TO_REPOSITORY/requirements.txt
-python harness.py evaluate --model PATH_TO_REPOSITORY/model.py --source file:data/test_demo.npz --runs 3
+```bash
+git clone https://github.com/citraaparamithaaa-dev/gdg-uam.git submission-check
+python -m pip install -r submission-check/requirements.txt
+python harness.py evaluate --model submission-check/model.py
 ```
 
-`model.py` defines `Model`. Weights and helpers load relative to that file. Predictions return Python integers in 0..7. The runtime handles missing values, preserves read-only inputs, uses one CPU thread under the official evaluator, and uses no metadata, network access, GPU, training, label lookup, or background prediction during inference. Compilation occurs during setup. The organizer supplies `competition_api.py` and `harness.py`; they must be on the import path.
+The last line is the competition's submission-check command. With the current public harness, it evaluates the training file by default. Because the final model was fitted on that file, its accuracy there is a compatibility check rather than an independent measure of generalization.
 
-The original training workflow remains under `training/`. After exporting the balanced 231-feature model, [training/install_fast_runtime.py](training/install_fast_runtime.py) installs this optimized runtime around the numerical weights. Runtime checks and file hashes are in [VERIFICATION.json](VERIFICATION.json) and [MANIFEST.json](MANIFEST.json). The manifest excludes itself.
+### Public demo check
 
-Before the competition deadline, ensure the organizers can clone the repository, run the Colab check, and send the required team details and repository link. No submission email has been sent from this project update. AI coding assistance was used; team members should be ready to explain the method.
+For the 400-sample demo, download `data/test_demo.npz` as described in the official setup and run:
 
-Official rules and evaluator: https://github.com/GDG-UAM/ml-contest-materials
-
-To regenerate the embedded notebook from these files and a local copy of the organizer's materials:
-
-```text
-python training/build_verify_notebook.py --materials PATH_TO_OFFICIAL_MATERIALS --candidate . --evidence evidence/latest/github_checkout_contract.json --output verify_colab.ipynb
+```bash
+python harness.py evaluate --model submission-check/model.py --source file:data/test_demo.npz --runs 3
 ```
+
+This is the command used for the reported demo results. The official harness and `competition_api.py` are supplied by the organizer; run these commands from that materials directory so both are available.
+
+## Measured results
+
+Three runs of the official harness completed successfully using the selected runtime. A separate fresh clone of the published GitHub commit also passed three demo runs.
+
+| Metric | Recorded result |
+| --- | ---: |
+| Public demo accuracy | **82.25% — 329 / 400** |
+| Official score on the finite demo | 3.2924 |
+| Total model prediction time for all 400 samples | 0.48–0.75 seconds per run |
+| Maximum setup time across the three recorded runs | 33.96 seconds |
+| Exceptions, invalid predictions, and timeouts | 0 |
+
+The table's timings come from the committed [official evaluator logs](evidence/latest/official_demo). Prediction time excludes dependency installation, model setup, compilation, and warmup. Cold compilation occurs during setup, whose official limit is 120 seconds. Timing varies by machine; these measurements were made locally.
+
+**Interpretation:** the public demo has been reused during development, including preprocessing selection. Its accuracy is a development result, not an untouched test estimate. The finite-demo score does not predict the score on the organizers' hidden evaluation stream. Colab execution and hidden-test performance have not been verified here.
+
+See [RESULTS.md](RESULTS.md) for candidate comparisons and [APPROACH.md](APPROACH.md) for the method, data checks, and limitations.
+
+## Method
+
+1. **Preprocess each signal.** Interpolate missing values, replace entirely missing channels with zeros, and apply the selected robust spike filter.
+2. **Extract 231 features.** Describe normalized distributions, local changes, autocorrelation, spectra, and cross-channel behavior.
+3. **Classify with gradient boosting.** Evaluate the exported 200-stage histogram gradient boosting model, with up to 15 leaves per tree, and calibrated class offsets.
+
+The runtime loads weights relative to `model.py`, handles read-only inputs, and returns one prediction per sample. It uses no metadata, network requests, GPU, training, or background prediction during inference. NumPy and Numba provide the inference runtime; scikit-learn is not needed to load the exported model.
+
+## Verify in Google Colab
+
+1. Open [the Colab notebook](https://colab.research.google.com/github/citraaparamithaaa-dev/gdg-uam/blob/main/verify_colab.ipynb), or download [`verify_colab.ipynb`](verify_colab.ipynb) and upload it to Colab.
+2. Select a **CPU runtime**, connect, and choose **Runtime → Run all**.
+3. Review the file-integrity checks, prediction checks, and three official evaluator runs. The final cell downloads the model package and evaluation results.
+
+The notebook embeds the model, weights, public demo, and unmodified official harness. An uploaded copy needs no GitHub sign-in or Google Drive mount. Dependencies install in a separate folder. Installation and initial compilation take longer than prediction; run the notebook to measure performance on the assigned Colab CPU.
+
+## Repository guide
+
+| Path | Purpose |
+| --- | --- |
+| [`model.py`](model.py) | Competition entry point and tree inference |
+| [`weights.npz`](weights.npz) | Trained tree parameters, feature indices, and class offsets |
+| [`core_features.py`](core_features.py), [`fused_features.py`](fused_features.py) | Selected preprocessing and feature extraction |
+| [`requirements.txt`](requirements.txt) | Pinned inference dependencies |
+| [`verify_colab.ipynb`](verify_colab.ipynb) | Self-contained verification notebook |
+| [`training/`](training/) | Training, export, packaging, and verification utilities |
+| [`APPROACH.md`](APPROACH.md), [`RESULTS.md`](RESULTS.md) | Method and experimental results |
+| [`evidence/latest/`](evidence/latest/) | Recorded audits, comparisons, and runtime checks |
+| [`VERIFICATION.json`](VERIFICATION.json) | Machine-readable verification summary |
+| [`MANIFEST.json`](MANIFEST.json) | SHA-256 file hashes; excludes the manifest itself |
+
+## Submission notes
+
+The repository must be public or shared with the organizers' designated GitHub accounts so they can clone it. Organizer access has not been independently confirmed. Team and member details should accompany the submission through the organizers' required channel; no submission email has been sent by this project.
+
+AI coding assistance was used in implementation, experimentation, and documentation. The method and its limitations are documented for review.
